@@ -1,5 +1,5 @@
 import React from 'react';
-
+ 
 const SpinnerPage = () => {
   return (
     <div>
