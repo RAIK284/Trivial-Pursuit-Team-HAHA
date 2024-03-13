@@ -43,8 +43,8 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit} className="login-form">
         <h1 className="login-header">Login</h1>
 
-        <div class="input-1">
-          <div class="username-container">
+        <div className="input-1">
+          <div className="username-container">
             <IoPerson size={18} />
             <input
               onChange={(e) => setUsername(e.target.value)}
@@ -55,8 +55,8 @@ const LoginForm = () => {
           <div className="underline" />
         </div>
 
-        <div class="input-2">
-          <div class="username-container">
+        <div className="input-2">
+          <div className="username-container">
             <MdLock size={18} />
             <input
               onChange={(e) => setPassword(e.target.value)}

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from "react";
 
 const GameSession = () => {
+  const [gameSessionID, setGameSessionID] = useState("");
+
   return (
     <div>
-      <h1>Game Session Page Goes Here</h1>
+      {/* Enter the GameSession ID here to join the Lobby with the corresponding game session ID */}
+      <input onChange={(e) => setGameSessionID(e.target.value)}></input>
     </div>
   );
 };

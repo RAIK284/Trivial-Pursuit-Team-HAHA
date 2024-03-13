@@ -54,8 +54,8 @@ const RegisterForm = () => {
       <form onSubmit={handleRegister} className="register-form">
         <h1 className="login-header">Register</h1>
 
-        <div class="input-1">
-          <div class="username-container">
+        <div className="input-1">
+          <div className="username-container">
             <IoPerson size={18} />
             <input
               onChange={(e) => setUsername(e.target.value)}
@@ -66,9 +66,9 @@ const RegisterForm = () => {
           </div>
           <div className="underline" />
         </div>
+        <div className="input-2">
 
-        <div class="input-2">
-          <div class="username-container">
+          <div className="username-container">            
             <MdLock size={18} />
             <input
               onChange={(e) => setPassword(e.target.value)}
@@ -101,7 +101,7 @@ const RegisterForm = () => {
         </div>
 
         <div>
-          <div class="username-container">
+          <div className="username-container">
             <MdLock size={18} />
             <input
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -114,6 +114,7 @@ const RegisterForm = () => {
           </div>
           <div className="underline" />
         </div>
+        {error && <span className="error-message">{error}</span>}
 
         <button type="submit" className="login-button">
           Register
@@ -126,7 +127,6 @@ const RegisterForm = () => {
             </Link>
           </span>
         </div>
-        {error && <div className="error-message">{error}</div>}
       </form>
     </div>
   );

@@ -75,8 +75,6 @@
 }
 
 .input-2 {
-  margin-top: 2.3rem;
-  margin-bottom: 0.5rem;
 }
 
 .eye-icon-closed,
@@ -135,4 +133,10 @@
 .login-button:hover {
   background-color: #242156;
   color: white;
+}
+
+
+.error-message{
+  text-align: center;
+  color: #242156;
 }

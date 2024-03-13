@@ -6,6 +6,7 @@ app.use(express.json());
 app.use(cors());
 const bcrypt = require("bcryptjs");
 
+
 const jwt = require("jsonwebtoken");
 const JWT_SECRET =
   "asdf897978bxcvbx{()asdfasdfa1819821xcvb8792315i13o{4?nhirevggr98";
@@ -21,8 +22,9 @@ mongoose
   .catch((e) => console.log(e));
 
 require("./models/User");
-const User = mongoose.model("UserInfo");
 
+
+const User = mongoose.model("UserInfo");
 // Creates a User
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
@@ -78,6 +80,8 @@ app.post("/userData", async (req, res) => {
   } catch (error) {
   }
 });
+
+
 
 app.listen(5000, () => {
   console.log("Server Started");
