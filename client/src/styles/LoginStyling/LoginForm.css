@@ -23,12 +23,16 @@
 .login-header {
   text-align: center;
 }
-.login-form {
+.login-form, .register-form {
   border: 0.33rem solid;
   border-radius: 2rem;
   padding: 2rem 3rem 3rem 3rem;
   width: 17rem;
   height: 21rem;
+}
+
+.register-form{
+  height: 23rem;
 }
 
 .username-container {
@@ -89,7 +93,7 @@
   width: 4rem;
 }
 
-.no-account {
+.no-account, .have-account {
   font-size: 0.8rem;
   font-weight: 500;
   width: 4rem;
@@ -100,7 +104,7 @@
   color: #242156;
 }
 
-.register {
+.register, .login {
   color: white;
   font-weight: bold;
   cursor: pointer;
