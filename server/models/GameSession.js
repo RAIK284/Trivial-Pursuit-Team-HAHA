@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 
-const gameSessionSchema = new mongoose.Schema({
-  players: [{
-    player: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    score: { type: Number, default: 0 }
-  }],
-  isActive: {
-    type: Boolean,
-    default: true
+const gameSessionSchema = new mongoose.Schema(
+  {
+    sessionId: { type: String, required: true, unique: true },
+    players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserInfo' }],
   },
-  // Include other game session fields if necessary
-});
+  {
+    collection: "GameSession",
+  }
+);
 
-const GameSession = mongoose.model('GameSession', gameSessionSchema);
-
-module.exports = GameSession;
+mongoose.model('GameSession', gameSessionSchema);

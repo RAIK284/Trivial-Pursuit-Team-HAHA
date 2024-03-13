@@ -1,9 +1,13 @@
-import React from 'react';
+import React from "react";
+import LoginForm from "../components/LoginForm";
+import loginBackground from "../assets/img/login-bg.jpg";
+import "../styles/LoginStyling/LoginForm.css";
 
 const LoginPage = () => {
   return (
-    <div>
-      <h1>Login Page Goes Here</h1>
+    <div className="login">
+      <img alt="background" className="login-bg-img" src={loginBackground} />
+      <LoginForm />
     </div>
   );
 };
