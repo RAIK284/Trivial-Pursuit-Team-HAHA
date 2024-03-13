@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-app.use(express.json());
-app.use(cors());
+const http = require("http");
+const { Server } = require("socket.io");
 const bcrypt = require("bcryptjs");
-
-
 const jwt = require("jsonwebtoken");
 const JWT_SECRET =
   "asdf897978bxcvbx{()asdfasdfa1819821xcvb8792315i13o{4?nhirevggr98";
+
+app.use(express.json());
+app.use(cors());
 
 // Mongo Database Connection
 const mongoURL =
@@ -22,7 +23,6 @@ mongoose
   .catch((e) => console.log(e));
 
 require("./models/User");
-
 
 const User = mongoose.model("UserInfo");
 // Creates a User
@@ -61,7 +61,7 @@ app.post("/login-user", async (req, res) => {
     return res.status(401).json({ error: "Invalid Password" }); // Use 401 for unauthorized
   }
 
-const token = jwt.sign({ username: user.username }, JWT_SECRET);
+  const token = jwt.sign({ username: user.username }, JWT_SECRET);
   return res.status(200).json({ status: "ok", data: token });
 });
 
@@ -77,12 +77,30 @@ app.post("/userData", async (req, res) => {
       .catch((error) => {
         res.send({ status: "error", data: error });
       });
-  } catch (error) {
-  }
+  } catch (error) {}
 });
 
+//Creates the Server for Game Sessions This is newly added
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
 
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
 
-app.listen(5000, () => {
-  console.log("Server Started");
+  socket.on("join_room", (data) => {
+    socket.join(data);
+  });
+
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
+});
+
+server.listen(5000, () => {
+  console.log("Server is Running");
 });
