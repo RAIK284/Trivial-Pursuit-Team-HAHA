@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 
 const gameSessionSchema = new mongoose.Schema(
   {
-    sessionId: { type: String, required: true, unique: true },
-    players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserInfo' }],
+    gamesession: { type: String},
   },
   {
-    collection: "GameSession",
+    collection: "GameSessionInfo",
   }
 );
 
-mongoose.model('GameSession', gameSessionSchema);
+mongoose.model('GameSessionInfo', gameSessionSchema);

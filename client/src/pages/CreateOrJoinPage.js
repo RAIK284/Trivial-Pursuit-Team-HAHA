@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import io from "socket.io-client";
+import ShortUniqueId from "short-unique-id";
+import { useNavigate } from "react-router-dom"; // Using useNavigate instead of useHistory
+
+const socket = io.connect("http://localhost:5000");
 
 const CreateOrJoinPage = () => {
+  const navigate = useNavigate(); // Using useNavigate hook
+  const { randomUUID } = new ShortUniqueId({ length: 5 });
+
   const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
 
   const getUserInfo = async () => {
     try {
       const res = await fetch("http://localhost:5000/userData", {
         method: "POST",
-        crossDomain: true,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({ token: window.localStorage.getItem("token") }),
       });
 
       const data = await res.json();
-      console.log(data, "dynamicUserInfo");
       setUsername(data.data.username);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -29,25 +34,62 @@ const CreateOrJoinPage = () => {
     getUserInfo();
   }, []);
 
+  const createRoom = () => {
+    const newGameSession = randomUUID();
+    handleGameSession(newGameSession).then(() => {
+      navigate(`/lobby/${newGameSession}`); // Using navigate to redirect
+    });
+  };
+
+  const joinRoom = async () => {
+    if (room) {
+      try {
+        const res = await fetch("http://localhost:5000/sessionExists", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ room }),
+        });
+
+        const data = await res.json();
+        if (data.exists) {
+          navigate(`/lobby/${room}`); 
+        } else {
+          alert("This room does not exist.");
+        }
+      } catch (err) {
+        console.error("Error checking session existence:", err);
+      }
+    }
+  };
+
+  const handleGameSession = async (gameSession) => {
+    try {
+      await fetch("http://localhost:5000/createsession", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ gamesession: gameSession }),
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <h1>Welcome {username}</h1>
-
-      {/* This button will Create a Game Session ID and take you to the corresponding 
-      lobby page for that game session ID. Every lobby should have a unique game session ID */}
-      <button>
-        <Link to={"/lobby"}>Create Game</Link>
-      </button>
-
-      {/* This button will take you to the GameSessionPage.js page that page will have an input
-      You will enter a GameSession ID into that input. That game session id will come from someone who used
-      the Create Game button.
-      Multiple users should be able to enter the same game session ID and join a lobby.
-      */}
-      <button>
-        <Link>Join Game</Link>
-      </button>
-
+      <button onClick={createRoom}>Create Room</button>
+      <input
+        value={room}
+        onChange={(e) => setRoom(e.target.value)}
+        placeholder="Join Room..."
+      />
+      <button onClick={joinRoom}>Join Room</button>
     </div>
   );
 };
