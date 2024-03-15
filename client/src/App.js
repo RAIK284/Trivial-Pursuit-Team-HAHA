@@ -16,7 +16,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/game-session" element={<GameSessionPage />} />
         <Route path="/lobby/:gameSession" element={<LobbyPage/>} />
-        <Route path="/spinner" element={<SpinnerPage />} />
+        <Route path="/spinner-page/:gameSession" element={<SpinnerPage />} />
         <Route path="/create-or-join-game" element={<CreateOrJoinPage />} />
 
       </Routes>

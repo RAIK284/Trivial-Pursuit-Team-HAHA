@@ -1,12 +1,12 @@
 import React from "react";
-import loginBackground from "../assets/img/login-bg.jpg";
+import registerBackground from "../assets/img/space-planets-bg.jpg";
 import "../styles/LoginStyling/LoginForm.css";
 import RegisterForm from "../components/RegisterForm";
 
 const RegisterPage = () => {
   return (
     <div className="login">
-      <img alt="background" className="login-bg-img" src={loginBackground} />
+      <img alt="background" className="login-bg-img" src={registerBackground} />
       <RegisterForm />
     </div>
   );

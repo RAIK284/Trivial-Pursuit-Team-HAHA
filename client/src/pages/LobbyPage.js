@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
+import lobbyBackground from "../assets/img/space-ufo-bg.jpg";
+import "../styles/LobbyPage.css";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { LuSendHorizonal } from "react-icons/lu";
 
 const socket = io.connect("http://localhost:5000");
 
@@ -10,6 +14,8 @@ const LobbyPage = () => {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [players, setPlayers] = useState([]);
+  const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -22,21 +28,21 @@ const LobbyPage = () => {
           },
           body: JSON.stringify({ token: window.localStorage.getItem("token") }),
         });
-  
+
         const data = await res.json();
         setUsername(data.data.username);
       } catch (err) {
         console.error(err);
       }
     };
-  
+
     getUserInfo();
-  
+
     console.log(`Attempting to connect to room: ${gameSession}`);
     if (username) {
       socket.emit("join_room", { user: username, room: gameSession });
     }
-  
+
     socket.on("receive_message", (data) => {
       console.log(`Message received: ${data.message}`);
       setMessages((prevMessages) => [
@@ -44,19 +50,23 @@ const LobbyPage = () => {
         { username: data.username, message: data.message },
       ]);
     });
-  
+
     socket.on("update_player_list", (playerList) => {
-      setPlayers(playerList);
+      // Map the incoming list of usernames to objects with playerName and playerColor
+      const updatedPlayers = playerList.map((playerName, index) => ({
+        playerName,
+        playerColor: playerColors[index % playerColors.length], // Cycle through playerColors
+      }));
+      setPlayers(updatedPlayers); // Update state with the new player objects
     });
-  
+
     return () => {
       socket.emit("leave_room", { room: gameSession, user: username });
       socket.off("receive_message");
       socket.off("update_player_list");
       console.log(`Leaving room: ${gameSession}`);
     };
-  }, [gameSession, username]); // This useEffect will rerun if gameSession or username changes
-  
+  }, [gameSession, username]);
 
   const sendMessage = () => {
     if (currentMessage !== "") {
@@ -69,28 +79,88 @@ const LobbyPage = () => {
     }
   };
 
+  const messageDisplayRef = useRef(null);
+  useEffect(() => {
+    if (messageDisplayRef.current) {
+      const { current: messageDisplayElement } = messageDisplayRef;
+      messageDisplayElement.scrollTop = messageDisplayElement.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div>
-      <h1>Lobby: {gameSession}</h1>
-      <div>
-        {messages.map((msg, index) => (
-          <p key={index}>
-            {msg.username}: {msg.message}
-          </p>
-        ))}
+    <div className="page-container">
+      <img className="lobby-bg" alt="background" src={lobbyBackground} />
+      <div className="player-button-container">
+        <div className="all-player-container">
+          {players.map((player, index) => (
+            <div className="single-player-container" key={index}>
+              <div
+                style={{ backgroundColor: player.playerColor }}
+                className="player-name"
+              >
+                {player.playerName}
+              </div>
+              <IoPersonCircleSharp color="black" size={140} />
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={navigate(`/spinner-page/${gameSession}`)}
+          className="start-game-button"
+        >
+          Start Game
+        </button>
+        <p className="session-id">Session ID: {gameSession}</p>
       </div>
-      <input
-        type="text"
-        value={currentMessage}
-        onChange={(e) => setCurrentMessage(e.target.value)}
-        placeholder="Type a message..."
-      />
-      <button onClick={sendMessage}>Send</button>
-      <div>
-        <h2>Players in Room:</h2>
-        {players.map((player, index) => (
-          <p key={index}>{player}</p>
-        ))}
+
+      <div class="chat-room-container">
+        <h2 className="chat-room-header">Chat Room</h2>
+        <div
+          ref={messageDisplayRef}
+          className="message-display scrollbar"
+          id="scrollbar1"
+        >
+          {messages.map((msg, index) => (
+            <p className="message" key={index}>
+              <span
+                style={{
+                  color:
+                    players.find((p) => p.playerName === msg.username)
+                      ?.playerColor || "black",
+                }}
+              >
+                {msg.username}
+              </span>
+              : {msg.message}
+            </p>
+          ))}
+        </div>
+        <div className="chat-container">
+          <form
+            className="chat-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage();
+            }}
+          >
+            <input
+              maxLength={100}
+              className="chat-input"
+              type="text"
+              value={currentMessage}
+              onChange={(e) => setCurrentMessage(e.target.value)}
+              placeholder="Enter a message..."
+            />
+            <div>
+              <LuSendHorizonal
+                onClick={sendMessage}
+                className="send-icon"
+                size={25}
+              />
+            </div>
+          </form>
+        </div>
+        <span className="message-length">{currentMessage.length}/75</span>
       </div>
     </div>
   );
