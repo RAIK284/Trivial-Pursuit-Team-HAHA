@@ -1,3 +1,8 @@
+:root {
+  --planet-orange: #ff7d6d;
+  --planet-green: #bedfcb;
+}
+
 .login {
   position: relative;
   height: 100vh;
@@ -79,6 +84,12 @@
 .eye-icon-open {
   margin-left: 3.5rem;
   cursor: pointer;
+  transition: all 300ms;
+}
+
+.eye-icon-closed:hover,
+.eye-icon-open:hover {
+  color: var(--planet-orange);
 }
 
 .forgot-password {
@@ -98,7 +109,7 @@
 
 .forgot-password:hover,
 .register:hover {
-  color: #242156;
+  color: var(--planet-orange);
 }
 
 .register,
@@ -130,11 +141,11 @@
 }
 
 .login-button:hover {
-  background-color: #242156;
+  background-color: var(--planet-orange);
   color: white;
 }
 
 .error-message {
   text-align: center;
-  color: #242156;
+  color: var(--planet-orange);
 }
