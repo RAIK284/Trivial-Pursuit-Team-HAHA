@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import lobbyBackground from "../assets/img/space-ufo-bg.jpg";
 import "../styles/LobbyPage.css";
@@ -15,7 +15,6 @@ const LobbyPage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [players, setPlayers] = useState([]);
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -104,12 +103,7 @@ const LobbyPage = () => {
             </div>
           ))}
         </div>
-        <button
-          onClick={navigate(`/spinner-page/${gameSession}`)}
-          className="start-game-button"
-        >
-          Start Game
-        </button>
+        <button className="start-game-button">Start Game</button>
         <p className="session-id">Session ID: {gameSession}</p>
       </div>
 
