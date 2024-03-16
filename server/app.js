@@ -125,6 +125,19 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("start_game", (data) => {
+    io.to(data.room).emit("navigate_to_game");
+  });
+
+  socket.on("answer_clicked", (data) => {
+
+    io.to(data.room).emit("click_recieved", data);
+  });
+
+  socket.on("create_questions", (data) =>{
+    io.to(data.room).emit("questions_created", data)
+  })
+
   socket.on("disconnecting", () => {
     // Get the list of rooms the socket is currently subscribed to, excluding the socket's own ID
     const rooms = Array.from(socket.rooms).filter((item) => item !== socket.id);

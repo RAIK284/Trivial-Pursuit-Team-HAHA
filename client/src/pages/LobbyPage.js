@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import lobbyBackground from "../assets/img/space-ufo-bg.jpg";
 import "../styles/LobbyPage.css";
@@ -15,6 +15,7 @@ const LobbyPage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [players, setPlayers] = useState([]);
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -59,6 +60,10 @@ const LobbyPage = () => {
       setPlayers(updatedPlayers); // Update state with the new player objects
     });
 
+    socket.on("navigate_to_game", () => {
+      navigate(`/round/${gameSession}`);
+    });
+
     return () => {
       socket.emit("leave_room", { room: gameSession, user: username });
       socket.off("receive_message");
@@ -66,6 +71,10 @@ const LobbyPage = () => {
       console.log(`Leaving room: ${gameSession}`);
     };
   }, [gameSession, username]);
+
+  const startGame = () => {
+    socket.emit("start_game", { room: gameSession });
+  };
 
   const sendMessage = () => {
     if (currentMessage !== "") {
@@ -103,11 +112,18 @@ const LobbyPage = () => {
             </div>
           ))}
         </div>
-        <button className="start-game-button">Start Game</button>
+        <button
+          onClick={() => {
+            startGame();
+          }}
+          className="start-game-button"
+        >
+          Start Game
+        </button>
         <p className="session-id">Session ID: {gameSession}</p>
       </div>
 
-      <div class="chat-room-container">
+      <div className="chat-room-container">
         <h2 className="chat-room-header">Chat Room</h2>
         <div
           ref={messageDisplayRef}
