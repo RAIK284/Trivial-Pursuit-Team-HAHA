@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import ShortUniqueId from "short-unique-id";
-import { useNavigate } from "react-router-dom"; // Using useNavigate instead of useHistory
+import { useNavigate } from "react-router-dom"; 
 
 const socket = io.connect("http://localhost:5000");
 
 const CreateOrJoinPage = () => {
-  const navigate = useNavigate(); // Using useNavigate hook
+  const navigate = useNavigate(); 
   const { randomUUID } = new ShortUniqueId({ length: 5 });
 
   const [username, setUsername] = useState("");
@@ -37,7 +37,7 @@ const CreateOrJoinPage = () => {
   const createRoom = () => {
     const newGameSession = randomUUID();
     handleGameSession(newGameSession).then(() => {
-      navigate(`/lobby/${newGameSession}`); // Using navigate to redirect
+      navigate(`/lobby/${newGameSession}`);
     });
   };
 
