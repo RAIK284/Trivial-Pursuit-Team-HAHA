@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import ShortUniqueId from "short-unique-id";
 import { useNavigate } from "react-router-dom"; 
+import "../styles/CreateOrJoinPage.css"
 
 const socket = io.connect("http://localhost:5000");
 
@@ -81,15 +82,19 @@ const CreateOrJoinPage = () => {
   };
 
   return (
-    <div>
-      <h1>Welcome {username}</h1>
-      <button onClick={createRoom}>Create Room</button>
+    <div className="create-or-join-page">
+      <h1>Welcome to the Game Portal {username}</h1>
+        {/* This Input Will Be Moved to Aaron's Page Along with its Logic */}
       <input
         value={room}
         onChange={(e) => setRoom(e.target.value)}
         placeholder="Join Room..."
       />
-      <button onClick={joinRoom}>Join Room</button>
+      <div className="buttons-container">
+        <button onClick={createRoom} className="create-button">Create a Game</button>
+        <button onClick={joinRoom} className="join-button">Join a Game</button>
+      </div>
+
     </div>
   );
 };
