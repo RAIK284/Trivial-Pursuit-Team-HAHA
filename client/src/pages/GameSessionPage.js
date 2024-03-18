@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
 
 const GameSession = () => {
+
   return (
     <div>
-      <h1>Game Session Page Goes Here</h1>
+      {/* Enter the GameSession ID here to join the Lobby with the corresponding game session ID */}
     </div>
   );
 };
