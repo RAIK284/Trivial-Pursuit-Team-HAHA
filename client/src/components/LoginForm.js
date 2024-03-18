@@ -10,7 +10,7 @@ const LoginForm = () => {
   const [passwordHidden, setpasswordHidden] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,11 +30,13 @@ const LoginForm = () => {
       console.log(data, "userLogin");
       if (data.status === "ok") {
         alert("Login Successful");
-        window.localStorage.setItem("token",data.data);
-        window.location.href="./create-or-join-game";
+        window.localStorage.setItem("token", data.data);
+        window.location.href = "./create-or-join-game";
+      } else {
+        setError(data.error);
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
 
@@ -42,11 +44,11 @@ const LoginForm = () => {
     <div className="login-form-container">
       <form onSubmit={handleSubmit} className="login-form">
         <h1 className="login-header">Login</h1>
-
         <div className="input-1">
           <div className="username-container">
             <IoPerson size={18} />
             <input
+              required
               onChange={(e) => setUsername(e.target.value)}
               className="username-input"
               placeholder="Username"
@@ -59,6 +61,7 @@ const LoginForm = () => {
           <div className="username-container">
             <MdLock size={18} />
             <input
+              required
               onChange={(e) => setPassword(e.target.value)}
               type={passwordHidden ? "password" : "text"}
               className="password-input"
@@ -85,12 +88,14 @@ const LoginForm = () => {
             </div>
           </div>
           <div className="underline" />
+          {error && <div className="error-message">{error}</div>}
         </div>
         <span className="forgot-password">Forgot Password?</span>
 
         <button type="submit" className="login-button">
           Login
         </button>
+
         <div className="register-container">
           <span className="no-account">
             Don't have an account?{" "}

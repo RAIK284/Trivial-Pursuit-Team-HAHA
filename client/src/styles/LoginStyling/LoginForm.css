@@ -1,6 +1,6 @@
 :root {
   --planet-orange: #ff7d6d;
-  --planet-green: #bedfcb;
+  --planet-green: #51b593;
 }
 
 .login {
@@ -21,7 +21,17 @@
 
 .login-form-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  z-index: 0;
+}
+
+.register-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   z-index: 0;
 }
 
@@ -37,8 +47,32 @@
   height: 21rem;
 }
 
+.register-success {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: var(--planet-green);
+  padding: 1rem;
+  border-radius: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  transition: all 300ms;
+  margin-top: -5rem;
+}
+.close-nav-toast{
+  transition: all 100ms;
+}
+.close-nav-toast:hover{
+  color: rgba(255, 255, 255, 0.798);
+}
+.register-success:hover {
+  background-color: #288b6a;
+}
+
 .register-form {
   height: 23rem;
+  margin-top: 5rem;
 }
 
 .username-container {
@@ -116,7 +150,7 @@
 .login {
   color: white;
   font-weight: bold;
-  cursor: pointer;
+  /* cursor: pointer; */
   text-decoration: none;
   transition: all 300ms;
 }
@@ -146,6 +180,7 @@
 }
 
 .error-message {
-  text-align: center;
   color: var(--planet-orange);
+  font-size: 0.8rem;
+  font-weight: normal;
 }

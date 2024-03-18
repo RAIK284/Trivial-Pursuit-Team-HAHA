@@ -33,7 +33,7 @@ app.post("/register", async (req, res) => {
     const oldUser = await User.findOne({ username });
 
     if (oldUser) {
-      return res.send({ error: "User Exists" });
+      return res.send({ error: "Username Is Already In Use" });
     }
     await User.create({
       username,
@@ -52,12 +52,12 @@ app.post("/login-user", async (req, res) => {
   const user = await User.findOne({ username });
 
   if (!user) {
-    return res.status(404).json({ error: "User Not Found" }); // Use 404 for not found
+    return res.status(404).json({ error: "That User Does Not Exist" }); // Use 404 for not found
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    return res.status(401).json({ error: "Invalid Password" }); // Use 401 for unauthorized
+    return res.status(401).json({ error: "Incorrect Password" }); // Use 401 for unauthorized
   }
 
   const token = jwt.sign({ username: user.username }, JWT_SECRET);
@@ -130,13 +130,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("answer_clicked", (data) => {
-
     io.to(data.room).emit("click_recieved", data);
   });
 
-  socket.on("create_questions", (data) =>{
-    io.to(data.room).emit("questions_created", data)
-  })
+  socket.on("create_questions", (data) => {
+    io.to(data.room).emit("questions_created", data);
+  });
 
   socket.on("disconnecting", () => {
     // Get the list of rooms the socket is currently subscribed to, excluding the socket's own ID
