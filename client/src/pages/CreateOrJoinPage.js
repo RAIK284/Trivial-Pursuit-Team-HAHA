@@ -1,5 +1,6 @@
 import React from 'react';
-// Harley here
+import "../styles/CreateOrJoinPage.css"
+// Harley here test 
 
 const CreateOrJoinPage = () => {
   return (
