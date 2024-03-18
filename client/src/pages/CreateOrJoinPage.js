@@ -4,8 +4,12 @@ import "../styles/CreateOrJoinPage.css"
 
 const CreateOrJoinPage = () => {
   return (
-    <div>
-      <h1>Create Or Join Page Goes Here</h1>
+    <div className="create-or-join-page">
+      <h1>Welcome to the Game Portal</h1>
+      <div className="buttons-container">
+        <button className="create-button">Create a Game</button>
+        <button className="join-button">Join a Game</button>
+      </div>
     </div>
   );
 };
