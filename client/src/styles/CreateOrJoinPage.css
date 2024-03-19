@@ -1,27 +1,87 @@
 .create-or-join-page {
-    text-align: center;
-  }
-  
-  .buttons-container {
-    margin-top: 20px;
-  }
-  
-  .create-button, .join-button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border: 5px;
-    border-radius: 5px;
-  }
-  
-  .create-button {
-    background-color: #af4ca3; /* Purple */
-    color: white;
-  }
-  
-  .join-page-join-button {
-    background-color: #008CBA; /* Blue */
-    color: white;
-  }
-  
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif; /* Change font-family if needed */
+  background-color: #aa65ff; /* Lobby page background color */
+  background-image: url('https://img.freepik.com/free-vector/gradient-galaxy-background_23-2150890725.jpg?w=1380&t=st=1710820959~exp=1710821559~hmac=5b0df68cb535b7e705b7264c659934ba14eb8371395e36b011647718e94680f4');
+  background-size: cover;
+  color: white; /* Lobby page text color */
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 2%;
+  margin-top: 8%;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 1); /* Add drop shadow */
+
+}
+
+input {
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center; /* Spacing between button blocks */
+  align-items: center;
+  margin-top: 0px; /* Adjust as needed */
+}
+
+.button-block {
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 10px;
+  padding: 2%;
+  width: 60%;
+  height: 70%;
+  margin: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: rgba(255, 255, 255, 0.2); /* Light transparent color */
+  transition: background-color 0.3s ease; /* Smooth transition effect */
+
+}
+
+.button-block img {
+  width:60%; /* Adjust size of icon */
+  height: auto; /* Adjust size of icon */
+  margin-bottom: 10%; /* Spacing between icon and button */
+  margin: 5%;
+}
+
+.button-block:hover {
+  background-color: rgba(255, 255, 255, 0.5); /* Brighter color on hover */
+  border: solid white;
+}
+
+
+.create-button, .join-button {
+  padding: 5% 5%;
+  font-size: 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.create-button {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+.join-button {
+  background-color: #008CBA; /* Blue */
+  color: white;
+}
+.create-button:hover, .join-button:hover {
+  background-color: #6CAE75; /* Lighter shade of green */
+}
+
