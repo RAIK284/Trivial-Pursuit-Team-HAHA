@@ -1,34 +1,48 @@
 .join-game-container {
-    text-align: center;
-  }
-  
-  .buttons-container {
-    margin-top: 20px;
-  }
-  
-  .join-game-container input[type="text"] {
-    padding: 10px 15px;
-    margin: 0 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .join-game-container button {
-    padding: 10px 20px;
-    margin-top: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .join-game-container button:hover {
-    opacity: 0.8;
-  }
-  
-  .join-button {
-    background-color: #008CBA; /* Blue */
-    color: white;
-  }
-  
+  text-align: center;
+  background-image: url('../assets/img/space-saucer-bg.jpg');
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the background */
+  height: 100vh; /* Set height to cover the entire viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.semi-transparent-box {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  padding: 20px; /* Add padding to the box */
+  border-radius: 10px; /* Add border radius for rounded corners */
+}
+
+.semi-transparent-box h1,
+.semi-transparent-box p {
+  color: white; /* Set text color to white */
+  font-size: 24px; /* Set font size to larger */
+}
+
+.semi-transparent-box input[type="text"] {
+  padding: 10px 15px;
+  margin: 10px; /* Add margin to all sides */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.semi-transparent-box button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.semi-transparent-box button:hover {
+  opacity: 0.8;
+}
+
+.join-button {
+  background-color: #008CBA; /* Blue */
+  color: white;
+
