@@ -65,12 +65,15 @@
 }
 
 .question-header {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
   background-color: #aa65ff;
-  font-size: 2.5rem;
+  font-size: 2rem;
   padding: 1rem;
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  margin: 3rem 0 5rem 0;
+  margin: 3rem 0 1rem 0;
   width: 100%;
   text-align: center;
   white-space: nowrap;
@@ -83,13 +86,15 @@
 }
 
 .question-choices {
-  font-size: 1.5rem;
+  cursor: pointer;
+  font-size: 1.3rem;
   width: 20%;
   text-align: center;
   padding: 2rem 6rem 2rem 6rem;
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: #aa65ff;
+  border: 0.05rem solid #aa65ff;
 }
 
 .question-choice-1 {
@@ -101,7 +106,6 @@
   position: absolute;
   top: 42.5%;
   right: 6%;
- 
 }
 
 .question-choice-3 {
@@ -111,6 +115,22 @@
 }
 
 .question-choice-4 {
-    position: absolute;
-    top: 60%;
+  position: absolute;
+  top: 60%;
 }
+
+.question-true {
+  border-color: #58d05c;
+
+  background-color: #58d05c;
+}
+.question-false {
+  border-color: #280f73;
+
+  background-color: #280f73;
+}
+
+.selected-choice {
+  border: 0.05rem solid white;
+}
+

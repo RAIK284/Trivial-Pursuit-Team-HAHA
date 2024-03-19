@@ -8,7 +8,7 @@ const RoundPage = () => {
   const handleStartGame = () => {
     setTimeout(() => {
       navigate(`/game/${gameSession}`);
-    }, 5000);
+    }, 2000);
   };
 
   useEffect(() => {

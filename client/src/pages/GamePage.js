@@ -5,27 +5,69 @@ import lobbyBackground from "../assets/img/space-saucer-bg.jpg";
 import tempWheel from "../assets/img/Blank.png";
 import "../styles/GamePage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
+import useStore from "../hooks/useStore";
+import TimerBar from "../components/TimerBar";
 
 const GamePage = () => {
-  const [username, setUsername] = useState("");
+  const { username } = useStore();
   const { gameSession } = useParams();
   const [players, setPlayers] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [scores, setScores] = useState({});
+  const [timer, setTimer] = useState(5050); // Actual timer state in milliseconds
+  const [visibleTimer, setVisibleTimer] = useState(5000); // Visible timer state for the TimerBar
+  const [answerRevealed, setAnswerRevealed] = useState(false);
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
-
-  const [playerClicked, setPlayerClicked] = useState("");
   const [socket, setSocket] = useState(null);
-  const handleClick = (answerChoices) => {
-    console.log("click");
 
-    socket.emit("answer_clicked", {
-      clickedBy: username,
-      isCorrect: answerChoices.isCorrect,
-      answer: answerChoices.answer,
-      room: gameSession,
-    });
+  const handleClick = (answerChoices, index) => {
+    if (!answerRevealed) {
+      setSelectedAnswer({ index, isCorrect: answerChoices.isCorrect });
+      socket.emit("answer_clicked", {
+        clickedBy: username,
+        isCorrect: answerChoices.isCorrect,
+        answer: answerChoices.answer,
+        room: gameSession,
+      });
+    }
   };
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 50);
+        if (visibleTimer > 0) {
+          setVisibleTimer((prevVisibleTimer) =>
+            Math.max(prevVisibleTimer - 50, 0)
+          );
+        }
+      }, 50);
+
+      return () => clearInterval(interval);
+    } else {
+      setAnswerRevealed(true);
+    }
+  }, [timer, shuffledAnswers, selectedAnswer]);
+
+  useEffect(() => {
+    if (answerRevealed && selectedAnswer !== null) {
+      const updatedScore =
+        (scores[username] || 0) + (selectedAnswer.isCorrect ? 100 : 0);
+      setScores({ ...scores, [username]: updatedScore });
+
+      socket.emit("update_score", {
+        user: username,
+        score: updatedScore,
+        room: gameSession,
+      });
+
+      setSelectedAnswer(null);
+      setAnswerRevealed(false);
+    }
+  }, [answerRevealed, selectedAnswer, scores, username, socket, gameSession]);
+
   useEffect(() => {
     const newSocket = io.connect("http://localhost:5000");
     setSocket(newSocket);
@@ -33,30 +75,7 @@ const GamePage = () => {
   }, []);
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/userData", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ token: window.localStorage.getItem("token") }),
-        });
-
-        const data = await res.json();
-        setUsername(data.data.username);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserInfo();
-  }, []);
-
-  useEffect(() => {
     if (socket && username) {
-      console.log(`Attempting to connect to room: ${gameSession}`);
       socket.emit("join_room", { user: username, room: gameSession });
 
       socket.on("update_player_list", (playerList) => {
@@ -94,19 +113,22 @@ const GamePage = () => {
           ];
 
           setShuffledAnswers(shuffleArray(combinedAnswers));
+          setTimer(5050);
+          setVisibleTimer(5000);
+          setAnswerRevealed(false);
+          setSelectedAnswer(null);
         }
       });
-
-      socket.on("click_recieved", (data) => {
-        console.log(data.clickedBy, data.isCorrect, data.answer);
-        setPlayerClicked(data.clickedBy);
+      socket.on("score_updated", ({ user, score }) => {
+        setScores((prevScores) => ({
+          ...prevScores,
+          [user]: score,
+        }));
       });
-
       return () => {
         socket.emit("leave_room", { room: gameSession, user: username });
         socket.off("update_player_list");
         socket.off("questions_created");
-        socket.off("click_recieved");
       };
     }
   }, [socket, username, gameSession]);
@@ -131,14 +153,29 @@ const GamePage = () => {
           {Array.isArray(questions) && questions.length > 0 && (
             <>
               <div className="question-header">{questions[0].question}</div>
+              <div className="question-timer">
+                <TimerBar
+                  width={2000}
+                  height={10}
+                  percentage={(visibleTimer / 5000) * 100}
+                />
+              </div>
               <div className="question-choices-container">
                 {shuffledAnswers.map((answerChoices, index) => (
                   <div
-                    onClick={() => {
-                      handleClick(answerChoices);
-                    }}
+                    className={`question-choices question-choice-${index + 1} ${
+                      answerRevealed
+                        ? answerChoices.isCorrect
+                          ? "question-true"
+                          : "question-false"
+                        : ""
+                    } ${
+                      selectedAnswer?.index === index && timer !== 0
+                        ? "selected-choice"
+                        : ""
+                    }`}
+                    onClick={() => handleClick(answerChoices, index)}
                     key={index}
-                    className={`question-choices question-choice-${index + 1}`}
                   >
                     {answerChoices.answer}
                   </div>
@@ -147,16 +184,13 @@ const GamePage = () => {
             </>
           )}
         </div>
-
-        <div>{playerClicked}</div>
       </div>
 
       <div className="player-question-container">
         <div className="Game-all-player-container">
           {players.map((player, index) => (
-            <div className="Game-single-player-container" key={index}>
+            <div key={index} className="Game-single-player-container">
               <div className="loading-bar"></div>
-
               <div className="Game-icon-name-container">
                 <IoPersonCircleSharp
                   className="Game-icon"
@@ -166,7 +200,9 @@ const GamePage = () => {
                 />
                 <div className="name-score-container">
                   <div className="Game-player-name">{player.playerName}</div>
-                  <div className="game-score">Score: 0</div>
+                  <div className="game-score">
+                    Score: {scores[player.playerName] || 0}
+                  </div>
                 </div>
                 <img
                   alt="wedges"

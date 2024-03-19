@@ -137,6 +137,9 @@ io.on("connection", (socket) => {
     io.to(data.room).emit("questions_created", data);
   });
 
+  socket.on("update_score", ({ user, score, room }) => {
+    io.to(room).emit("score_updated", { user, score });
+  });
   socket.on("disconnecting", () => {
     // Get the list of rooms the socket is currently subscribed to, excluding the socket's own ID
     const rooms = Array.from(socket.rooms).filter((item) => item !== socket.id);
