@@ -23,11 +23,12 @@
 
 .join-game-header {
   background-color: var(--planet-purple);
-  font-size: 5rem;
+  font-size: 4rem;
   width: 75%;
   border-radius: 2rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-top: 5rem;
 }
 .join-button-input-container {
   display: flex;
@@ -35,7 +36,7 @@
   align-items: center;
   background-color: var(--planet-purple);
   width: 75%;
-  height: 38%;
+  height: 25rem;
   border-radius: 2rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   gap: 10rem;
@@ -62,7 +63,7 @@
 }
 
 .join-game-text {
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: bold;
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.26);
 }
@@ -73,7 +74,7 @@
   justify-content: center;
   align-items: center;
   width: fit-content;
-  margin-top: 8rem;
+  margin-top: 5rem;
   gap: 3rem;
 }
 .join-page-input:focus {
