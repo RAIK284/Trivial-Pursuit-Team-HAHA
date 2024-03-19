@@ -7,6 +7,7 @@ import "../styles/GamePage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import useStore from "../hooks/useStore";
 import TimerBar from "../components/TimerBar";
+import LoadingBar from "../components/LoadingBar";
 
 const GamePage = () => {
   const { username } = useStore();
@@ -225,36 +226,12 @@ const GamePage = () => {
                           : "question-false"
                         : ""
                     } ${
-                      selectedAnswer?.index === index && timer !== 0
-                        ? "selected-choice"
-                        : ""
+                      selectedAnswer?.index === index ? "selected-choice" : ""
                     }`}
                     onClick={() => handleClick(answerChoices, index)}
                     key={index}
                   >
                     {answerChoices.answer}
-                    {/* Display player colors for each player who selected this answer */}
-                    {answerRevealed &&
-                      answerChoices.selectedBy &&
-                      answerChoices.selectedBy.map((playerName) => {
-                        const player = players.find(
-                          (p) => p.playerName === playerName
-                        );
-                        return (
-                          <div
-                            key={playerName}
-                            style={{
-                              height: "10px",
-                              width: "10px",
-                              backgroundColor:
-                                player?.playerColor || "transparent",
-                              display: "inline-block",
-                              marginLeft: "5px",
-                              borderRadius: "50%",
-                            }}
-                          ></div>
-                        );
-                      })}
                   </div>
                 ))}
               </div>
@@ -269,34 +246,36 @@ const GamePage = () => {
         </div>
       </div>
 
-      <div className="player-question-container">
-        <div className="Game-all-player-container">
-          {players.map((player, index) => (
-            <div key={index} className="Game-single-player-container">
-              <div className="loading-bar"></div>
-              <div className="Game-icon-name-container">
-                <IoPersonCircleSharp
-                  className="Game-icon"
-                  style={{ backgroundColor: player.playerColor }}
-                  color="black"
-                  size={40}
-                />
-                <div className="name-score-container">
-                  <div className="Game-player-name">{player.playerName}</div>
-                  <div className="game-score">
-                    Score: {scores[player.playerName] || 0}
+      {questionIndex < numFetched && (
+        <div className="player-question-container">
+          <div className="Game-all-player-container">
+            {players.map((player, index) => (
+              <div key={index} className="Game-single-player-container">
+                <LoadingBar score={scores[player.playerName] || 0} />
+                <div className="Game-icon-name-container">
+                  <IoPersonCircleSharp
+                    className="Game-icon"
+                    style={{ backgroundColor: player.playerColor }}
+                    color="black"
+                    size={40}
+                  />
+                  <div className="name-score-container">
+                    <div className="Game-player-name">{player.playerName}</div>
+                    <div className="game-score">
+                      Score: {scores[player.playerName] || 0}
+                    </div>
                   </div>
+                  <img
+                    alt="wedges"
+                    className="temporary-wheel-image"
+                    src={tempWheel}
+                  />
                 </div>
-                <img
-                  alt="wedges"
-                  className="temporary-wheel-image"
-                  src={tempWheel}
-                />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

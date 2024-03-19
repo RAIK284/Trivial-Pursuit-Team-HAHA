@@ -83,17 +83,18 @@
 }
 
 .create-button:hover {
-  background-color: #78c081; /* Lighter shade of green */
+  background-color: #4bc25a; 
 }
 
 .join-button {
-  background-color: #8ee1ce; /* Blue */
+  background-color: #8ee1ce; 
   color: white;
 }
 .join-button:hover {
-  background-color: #1dc09a;
+  background-color: #22d9ae;
 }
 
 .create-or-join-username {
   color: var(--planet-orange);
 }
+
