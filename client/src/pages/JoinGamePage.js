@@ -1,10 +1,3 @@
-<<<<<<< Updated upstream
-import React from "react";
-import "../styles/JoinGamePage.css";
-
-const JoinGamePage = () => {
-  return <div> Aaron Here</div>;
-=======
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
@@ -21,12 +14,14 @@ const JoinGamePage = () => {
     return () => newSocket.close();
   }, []);
 
+const JoinGamePage = () => {
+const [sessionId, setSessionId] = useState("");
+
   const handleInputChange = (event) => {
     setSessionId(event.target.value);
   };
 
   const handleJoinGame = () => {
-    // You can perform actions like joining the game using the session ID and socket
     console.log("Joining game with session ID:", sessionId);
   };
 
@@ -47,7 +42,6 @@ const JoinGamePage = () => {
       </div>
     </div>
   );
->>>>>>> Stashed changes
 };
 
 export default JoinGamePage;
