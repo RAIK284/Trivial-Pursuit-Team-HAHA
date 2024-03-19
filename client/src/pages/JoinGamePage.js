@@ -1,44 +1,66 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import io from "socket.io-client";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { IoIosRocket } from "react-icons/io";
 import "../styles/JoinGamePage.css";
 
 const JoinGamePage = () => {
-  const { gameSession } = useParams();
   const [sessionId, setSessionId] = useState("");
-  const [socket, setSocket] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const newSocket = io.connect("http://localhost:5000");
-    setSocket(newSocket);
-    return () => newSocket.close();
-  }, []);
+  const joinRoom = async (e) => {
+    e.preventDefault();
+    if (sessionId) {
+      try {
+        const res = await fetch("http://localhost:5000/sessionExists", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ sessionId }),
+        });
 
-const JoinGamePage = () => {
-const [sessionId, setSessionId] = useState("");
-
-  const handleInputChange = (event) => {
-    setSessionId(event.target.value);
-  };
-
-  const handleJoinGame = () => {
-    console.log("Joining game with session ID:", sessionId);
+        const data = await res.json();
+        if (data.exists) {
+          navigate(`/lobby/${sessionId}`);
+        } else {
+          alert("This room does not exist.");
+        }
+      } catch (err) {
+        console.error("Error checking session existence:", err);
+      }
+    }
   };
 
   return (
     <div className="join-game-container">
-      <div className="semi-transparent-box">
-        <h1>Game Mode</h1>
-        <p>Join a game here:</p>
-        <input
-          type="text"
-          placeholder="Enter Game Session ID"
-          value={sessionId}
-          onChange={handleInputChange}
-        />
-        <button className="join-button" onClick={handleJoinGame}>
-          Join Game
-        </button>
+      <h1 className="join-game-header">Join Game</h1>
+
+      <div className="join-button-input-container">
+        <div class="text-input-container">
+          <span class="join-game-text">
+            Enter The Trivial Pursuit!
+          </span>
+          <form className="join-game-form" onSubmit={joinRoom}>
+            <input
+              className="join-page-input"
+              type="text"
+              placeholder="Game Session ID Here..."
+              value={sessionId}
+              onChange={(e) => {
+                setSessionId(e.target.value);
+              }}
+            />
+            <IoIosRocket
+              style={{
+                color: `${sessionId ? "white" : "rgba(0, 0, 0, 0.222)"}`,
+              }}
+              onClick={joinRoom}
+              className="rocket-icon"
+              size={30}
+            />
+          </form>
+        </div>
       </div>
     </div>
   );

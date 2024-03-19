@@ -19,29 +19,7 @@ const CreateOrJoinPage = () => {
     });
   };
 
-  const joinRoom = async () => {
-    if (room) {
-      try {
-        const res = await fetch("http://localhost:5000/sessionExists", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ room }),
-        });
-
-        const data = await res.json();
-        if (data.exists) {
-          navigate(`/lobby/${room}`);
-        } else {
-          alert("This room does not exist.");
-        }
-      } catch (err) {
-        console.error("Error checking session existence:", err);
-      }
-    }
-  };
+  
 
   const handleGameSession = async (gameSession) => {
     try {
@@ -71,9 +49,7 @@ const CreateOrJoinPage = () => {
         <button onClick={createRoom} className="create-button">
           Create a Game
         </button>
-        <button onClick={joinRoom} className="join-button">
-          Join a Game
-        </button>
+        
       </div>
     </div>
   );
