@@ -68,12 +68,14 @@ const CreateOrJoinPage = () => {
         placeholder="Join Room..."
       />
       <div className="buttons-container">
-        <button onClick={createRoom} className="create-button">
-          Create a Game
-        </button>
-        <button onClick={joinRoom} className="join-button">
-          Join a Game
-        </button>
+        <div className="button-block">
+          <img src="https://cdn-icons-png.freepik.com/512/8237/8237258.png" alt="Join Game Icon" />
+          <button onClick={joinRoom} className="join-button">Join a Game</button>
+        </div>
+        <div className="button-block">
+          <img src="https://images.vexels.com/media/users/3/249681/isolated/preview/2e033ab207c08313f20bf7478f0b064b-90-s-arcade-color-stroke.png" alt="Start Game Icon" />
+          <button onClick={createRoom} className="create-button">Create a Game</button>
+        </div>
       </div>
     </div>
   );
