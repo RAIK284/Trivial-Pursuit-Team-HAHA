@@ -29,7 +29,6 @@ const LoginForm = () => {
       const data = await res.json();
       console.log(data, "userLogin");
       if (data.status === "ok") {
-        alert("Login Successful");
         window.localStorage.setItem("token", data.data);
         window.location.href = "./create-or-join-game";
       } else {
