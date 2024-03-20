@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/RoundPage.css";
+import lobbyBackground from "../assets/img/space-ufo-bg.jpg";
+import blankSpinner from "../assets/img/blank-spinner.png";
+
 
 const RoundPage = () => {
+  const [currentRound, setCurrentRound] = useState(1);
   const navigate = useNavigate();
   const { gameSession } = useParams();
-  const [countdown, setCountdown] = useState(5);
+
+  const handleStartGame = () => {
+    setTimeout(() => {
+      navigate(`/game/${gameSession}`);
+    }, 2000);
+  };
 
   useEffect(() => {
-    if (countdown > 0) {
-      const timerId = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      return () => clearTimeout(timerId);
-    } else {
-      navigate(`/game/${gameSession}`);
-    }
-  }, [countdown, navigate, gameSession]);
+    handleStartGame();
+  });
 
-  return <div>You are on Round 1 Your Game Will Start in: {countdown}</div>;
+  return <div>You are on Round 1</div>;
 };
 
 export default RoundPage;
