@@ -41,6 +41,7 @@ const LoginForm = () => {
 
   return (
     <div className="login-form-container">
+    <div className="trivial-pursuit">Trivial Pursuit</div>
       <form onSubmit={handleSubmit} className="login-form">
         <h1 className="login-header">Login</h1>
         <div className="input-1">

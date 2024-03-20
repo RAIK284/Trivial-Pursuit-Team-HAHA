@@ -1,27 +1,100 @@
+:root {
+  --light-transparent: rgba(255, 255, 255, 0.2); /* Light transparent color */
+  --light: rgba(255, 255, 255, 0.25); /* Light transparent color */
+}
+
 .create-or-join-page {
-    text-align: center;
-  }
-  
-  .buttons-container {
-    margin-top: 20px;
-  }
-  
-  .create-button, .join-button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border: 5px;
-    border-radius: 5px;
-  }
-  
-  .create-button {
-    background-color: #af4ca3; /* Purple */
-    color: white;
-  }
-  
-  .join-button {
-    background-color: #008CBA; /* Blue */
-    color: white;
-  }
-  
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #aa65ff; /* Lobby page background color */
+  background-image: url("../assets/img/space-ufo-bg.jpg");
+  background-size: cover;
+  color: white; /* Lobby page text color */
+}
+
+.game-portal-header {
+  font-size: 3.5rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
+  background-color: var(--planet-purple);
+  border-radius: 1rem;
+  width: 75%;
+  text-align: center;
+  margin: 2rem 0 0 0;
+  padding: 0.5rem 0 0.5rem 0;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 85%;
+  gap: 1rem;
+}
+
+.button-block {
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 10px;
+  padding: 2%;
+  width: 80%;
+  height: 70%;
+  margin: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: flex-end; */
+  border: solid rgba(255, 255, 255, 0.2);
+  background-color: var(--planet-purple);
+  transition: background-color 0.3s ease; /* Smooth transition effect */
+}
+
+.button-block img {
+  width: 60%; /* Adjust size of icon */
+  height: auto; /* Adjust size of icon */
+  margin-bottom: 10%; /* Spacing between icon and button */
+  margin: 5%;
+}
+
+.button-block:hover {
+  border: solid white;
+}
+
+.create-button,
+.join-button {
+  /* padding: 5% 5%; */
+  width: 75%;
+  padding: 1rem 0 1rem 0;
+  font-size: 2rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.33);
+  box-shadow: rgba(0, 0, 0, 0.233) 0px 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 1rem;
+  width: 100%;
+  transition: all 300ms;
+}
+
+.create-button {
+  background-color: #afec7f; /* Green */
+  color: white;
+}
+
+.create-button:hover {
+  background-color: #4bc25a; 
+}
+
+.join-button {
+  background-color: #8ee1ce; 
+  color: white;
+}
+.join-button:hover {
+  background-color: #22d9ae;
+}
+
+.create-or-join-username {
+  color: var(--planet-orange);
+}
+

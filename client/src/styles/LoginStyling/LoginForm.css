@@ -47,6 +47,10 @@
   height: 21rem;
 }
 
+.login-form {
+  margin-top: 2rem;
+}
+
 .register-success {
   cursor: pointer;
   display: flex;
@@ -60,10 +64,10 @@
   transition: all 300ms;
   margin-top: -5rem;
 }
-.close-nav-toast{
+.close-nav-toast {
   transition: all 100ms;
 }
-.close-nav-toast:hover{
+.close-nav-toast:hover {
   color: rgba(255, 255, 255, 0.798);
 }
 .register-success:hover {
@@ -72,7 +76,7 @@
 
 .register-form {
   height: 23rem;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
 }
 
 .username-container {
@@ -183,4 +187,9 @@
   color: var(--planet-orange);
   font-size: 0.8rem;
   font-weight: normal;
+}
+
+.trivial-pursuit {
+  margin-top: -4rem;
+  font-size: 3rem;
 }

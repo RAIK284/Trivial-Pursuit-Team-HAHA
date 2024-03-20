@@ -7,6 +7,7 @@ import "../styles/GamePage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import useStore from "../hooks/useStore";
 import TimerBar from "../components/TimerBar";
+import LoadingBar from "../components/LoadingBar";
 
 const GamePage = () => {
   const { username } = useStore();
@@ -16,15 +17,28 @@ const GamePage = () => {
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [scores, setScores] = useState({});
-  const [timer, setTimer] = useState(5050); // Actual timer state in milliseconds
-  const [visibleTimer, setVisibleTimer] = useState(5000); // Visible timer state for the TimerBar
+  const [timer, setTimer] = useState(5050);
+  const [visibleTimer, setVisibleTimer] = useState(5000);
   const [answerRevealed, setAnswerRevealed] = useState(false);
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
   const [socket, setSocket] = useState(null);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  let numFetched = 7;
 
   const handleClick = (answerChoices, index) => {
     if (!answerRevealed) {
       setSelectedAnswer({ index, isCorrect: answerChoices.isCorrect });
+
+      setShuffledAnswers((prevAnswers) => {
+        const newAnswers = [...prevAnswers];
+        if (!newAnswers[index].selectedBy) {
+          newAnswers[index].selectedBy = [username];
+        } else if (!newAnswers[index].selectedBy.includes(username)) {
+          newAnswers[index].selectedBy.push(username);
+        }
+        return newAnswers;
+      });
+
       socket.emit("answer_clicked", {
         clickedBy: username,
         isCorrect: answerChoices.isCorrect,
@@ -49,7 +63,7 @@ const GamePage = () => {
     } else {
       setAnswerRevealed(true);
     }
-  }, [timer, shuffledAnswers, selectedAnswer]);
+  }, [timer]);
 
   useEffect(() => {
     if (answerRevealed && selectedAnswer !== null) {
@@ -63,10 +77,25 @@ const GamePage = () => {
         room: gameSession,
       });
 
-      setSelectedAnswer(null);
-      setAnswerRevealed(false);
+      setTimeout(() => {
+        setSelectedAnswer(null);
+        setAnswerRevealed(false);
+        setQuestionIndex(questionIndex + 1);
+        setTimer(5050);
+        setVisibleTimer(5000);
+      }, 2000);
+    } else {
+      if (answerRevealed) {
+        setTimeout(() => {
+          setSelectedAnswer(null);
+          setAnswerRevealed(false);
+          setQuestionIndex(questionIndex + 1);
+          setTimer(5050);
+          setVisibleTimer(5000);
+        }, 2000);
+      }
     }
-  }, [answerRevealed, selectedAnswer, scores, username, socket, gameSession]);
+  }, [answerRevealed, selectedAnswer]);
 
   useEffect(() => {
     const newSocket = io.connect("http://localhost:5000");
@@ -88,7 +117,7 @@ const GamePage = () => {
 
       const fetchQuestions = async () => {
         const response = await fetch(
-          "https://the-trivia-api.com/api/questions?categories=history&limit=5"
+          `https://the-trivia-api.com/api/questions?categories=history&limit=${numFetched}`
         );
         const data = await response.json();
         setQuestions(data);
@@ -104,11 +133,12 @@ const GamePage = () => {
             {
               answer: data.questions[0].correctAnswer,
               isCorrect: true,
-              selectedBy: null,
+              selectedBy: [],
             },
             ...data.questions[0].incorrectAnswers.map((incorrect) => ({
               answer: incorrect,
               isCorrect: false,
+              selectedBy: [],
             })),
           ];
 
@@ -119,12 +149,14 @@ const GamePage = () => {
           setSelectedAnswer(null);
         }
       });
+
       socket.on("score_updated", ({ user, score }) => {
         setScores((prevScores) => ({
           ...prevScores,
           [user]: score,
         }));
       });
+
       return () => {
         socket.emit("leave_room", { room: gameSession, user: username });
         socket.off("update_player_list");
@@ -132,6 +164,26 @@ const GamePage = () => {
       };
     }
   }, [socket, username, gameSession]);
+
+  useEffect(() => {
+    if (questions.length > 0 && questionIndex < questions.length) {
+      const currentQuestion = questions[questionIndex];
+      const combinedAnswers = [
+        {
+          answer: currentQuestion.correctAnswer,
+          isCorrect: true,
+          selectedBy: [],
+        },
+        ...currentQuestion.incorrectAnswers.map((incorrect) => ({
+          answer: incorrect,
+          isCorrect: false,
+          selectedBy: [],
+        })),
+      ];
+
+      setShuffledAnswers(shuffleArray(combinedAnswers));
+    }
+  }, [questionIndex, questions]);
 
   function shuffleArray(array) {
     const shuffledArray = array.slice();
@@ -150,9 +202,13 @@ const GamePage = () => {
       <div>
         <img className="lobby-bg" alt="background" src={lobbyBackground} />
         <div>
-          {Array.isArray(questions) && questions.length > 0 && (
+          {Array.isArray(questions) &&
+          questions.length > 0 &&
+          questionIndex < numFetched ? (
             <>
-              <div className="question-header">{questions[0].question}</div>
+              <div className="question-header">
+                {questions[questionIndex].question}
+              </div>
               <div className="question-timer">
                 <TimerBar
                   width={2000}
@@ -170,9 +226,7 @@ const GamePage = () => {
                           : "question-false"
                         : ""
                     } ${
-                      selectedAnswer?.index === index && timer !== 0
-                        ? "selected-choice"
-                        : ""
+                      selectedAnswer?.index === index ? "selected-choice" : ""
                     }`}
                     onClick={() => handleClick(answerChoices, index)}
                     key={index}
@@ -182,40 +236,47 @@ const GamePage = () => {
                 ))}
               </div>
             </>
+          ) : (
+            <div className="round-over-message">
+              Round Over <br />
+              Game Results Will Be Shown <br />
+              Then The Next Round Will Start
+            </div>
           )}
         </div>
       </div>
 
-      <div className="player-question-container">
-        <div className="Game-all-player-container">
-          {players.map((player, index) => (
-            <div key={index} className="Game-single-player-container">
-              <div className="loading-bar"></div>
-              <div className="Game-icon-name-container">
-                <IoPersonCircleSharp
-                  className="Game-icon"
-                  style={{ backgroundColor: player.playerColor }}
-                  color="black"
-                  size={40}
-                />
-                <div className="name-score-container">
-                  <div className="Game-player-name">{player.playerName}</div>
-                  <div className="game-score">
-                    Score: {scores[player.playerName] || 0}
+      {questionIndex < numFetched && (
+        <div className="player-question-container">
+          <div className="Game-all-player-container">
+            {players.map((player, index) => (
+              <div key={index} className="Game-single-player-container">
+                <LoadingBar score={scores[player.playerName] || 0} />
+                <div className="Game-icon-name-container">
+                  <IoPersonCircleSharp
+                    className="Game-icon"
+                    style={{ backgroundColor: player.playerColor }}
+                    color="black"
+                    size={40}
+                  />
+                  <div className="name-score-container">
+                    <div className="Game-player-name">{player.playerName}</div>
+                    <div className="game-score">
+                      Score: {scores[player.playerName] || 0}
+                    </div>
                   </div>
+                  <img
+                    alt="wedges"
+                    className="temporary-wheel-image"
+                    src={tempWheel}
+                  />
                 </div>
-                <img
-                  alt="wedges"
-                  className="temporary-wheel-image"
-                  src={tempWheel}
-                />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
-
 export default GamePage;
