@@ -25,9 +25,9 @@ const RoundPage = () => {
     }
   };
   const handleStartGame = () => {
-    // setTimeout(() => {
-    //   navigate(`/game/${gameSession}`);
-    // }, 5000);
+    setTimeout(() => {
+      navigate(`/game/${gameSession}`);
+    }, 5000);
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const RoundPage = () => {
       className="round-page"
       style={{ backgroundImage: `url(${lobbyBackground})` }}
     >
-      <div className="round-countdown">Your Game Will Start In <span style={{color: "var(--planet-orange)"}}>{countdown}</span></div>
+      <div className="round-countdown">Round {currentRound} Will Start In <span style={{color: "var(--planet-orange)"}}>{countdown}</span></div>
       <div className="progress-bar">
         {[1, 2, 3, 4].map((round, index) => (
           <React.Fragment key={round}>
