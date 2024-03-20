@@ -20,7 +20,7 @@ function App() {
         <Route path="/spinner-page" element={<SpinnerPage />} />
         <Route path="/create-or-join-game" element={<CreateOrJoinPage />} />
         <Route path="/game/:gameSession" element={<GamePage />} />
-        <Route path="/round" element={<RoundPage />} />
+        <Route path="/round/:gameSession" element={<RoundPage />} />
         <Route path="/join" element={<JoinGamePage />} />
       </Routes>
     </Router>
