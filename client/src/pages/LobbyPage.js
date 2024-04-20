@@ -5,7 +5,7 @@ import "../styles/LobbyPage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { LuSendHorizonal } from "react-icons/lu";
 import useRegister from "../hooks/useRegister";
-import useSocket from "../hooks/useSocket"; // Import the new useSocket hook
+import useSocket from "../hooks/useSocket"; 
 
 const LobbyPage = () => {
   const { gameSession } = useParams();
