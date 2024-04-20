@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/LoginStyling/LoginForm.css";
 import { IoPerson } from "react-icons/io5";
 import { MdLock } from "react-icons/md";
@@ -7,92 +7,61 @@ import { IoMdEye } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaCircleXmark } from "react-icons/fa6";
+import useRegister from "../hooks/useRegister";
 
 const RegisterForm = () => {
-  const [passwordHidden, setpasswordHidden] = useState(true);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [passwordHidden, setpasswordHidden] = React.useState(true);
   const navigate = useNavigate();
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setUsernameError("");
 
-    if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
-      return;
-    } else {
-      setPasswordError("");
-    }
-
-    try {
-      const res = await fetch("http://localhost:5000/register", {
-        method: "POST",
-        crossDomain: true,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-      if (!data.error) {
-        setSuccess(true);
-        console.log(success);
-        // navigate("/login");
-      } else {
-        setUsernameError(
-          data.error || "Registration failed. Please try again."
-        );
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    console.log("here", usernameError);
-  };
+  const {
+    registerUsername,
+    setRegisterUsername,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    usernameError,
+    passwordError,
+    success,
+    handleRegister,
+    setToastSuccess,
+  } = useRegister();
 
   return (
     <div className="register-form-container">
       {success && (
-        <>
-          <div
-            onClick={() => {
-              navigate("/login");
+        <div onClick={() => navigate("/login")} className="register-success">
+          <FaCircleCheck size={20} />
+          Your Account was Successfully Created! Tap here to log in.
+          <FaCircleXmark
+            size={20}
+            onClick={(e) => {
+              e.stopPropagation();
+              setToastSuccess(false);
             }}
-            className="register-success"
-          >
-            {" "}
-            <FaCircleCheck size={20} /> Your Account was Successfully Created!
-            Tap here to log in.{" "}
-            <FaCircleXmark
-              size={20}
-              onClick={(e) => {
-                e.stopPropagation();
-                setSuccess(false);
-              }}
-              className="close-nav-toast"
-            />
-          </div>
-        </>
+            className="close-nav-toast"
+          />
+        </div>
       )}
-      <form onSubmit={handleRegister} className="register-form">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
+        className="register-form"
+      >
         <h1 className="login-header">Register</h1>
         <div className="input-1">
           <div className="username-container">
             <IoPerson size={18} />
             <input
-              onChange={(e) => setUsername(e.target.value)}
+              value={registerUsername}
+              onChange={(e) => setRegisterUsername(e.target.value)}
               className="username-input"
               placeholder="Username"
               required
             />
           </div>
-
           <div className="underline" />
           {usernameError && (
             <span className="error-message">{usernameError}</span>
@@ -102,6 +71,7 @@ const RegisterForm = () => {
           <div className="username-container">
             <MdLock size={18} />
             <input
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               type={passwordHidden ? "password" : "text"}
               className="password-input"
@@ -109,22 +79,13 @@ const RegisterForm = () => {
               required
             />
             <div
-              onClick={() => {
-                setpasswordHidden(!passwordHidden);
-              }}
+              onClick={() => setpasswordHidden(!passwordHidden)}
+              className="eye-icon"
             >
               {passwordHidden ? (
-                <IoMdEyeOff
-                  onClick={setpasswordHidden}
-                  className="eye-icon-closed"
-                  size={19}
-                />
+                <IoMdEyeOff size={19} />
               ) : (
-                <IoMdEye
-                  onClick={setpasswordHidden}
-                  className="eye-icon-open"
-                  size={19}
-                />
+                <IoMdEye size={19} />
               )}
             </div>
           </div>
@@ -135,11 +96,11 @@ const RegisterForm = () => {
           <div className="username-container">
             <MdLock size={18} />
             <input
+              value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               type={passwordHidden ? "password" : "text"}
               className="password-input"
-              placeholder="Confirm Password
-              "
+              placeholder="Confirm Password"
               required
             />
           </div>

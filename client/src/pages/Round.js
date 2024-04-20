@@ -19,11 +19,7 @@ const RoundPage = () => {
     } else {
     }
   }, [countdown, navigate, gameSession]);
-  const onRoundClick = (round) => {
-    if (round === currentRound) {
-      setCurrentRound(currentRound + 1);
-    }
-  };
+
   const handleStartGame = () => {
     setTimeout(() => {
       navigate(`/game/${gameSession}`);
@@ -46,8 +42,6 @@ const RoundPage = () => {
               className={`round round-${round} ${
                 currentRound === round ? "current" : ""
               } ${currentRound > round ? "completed" : ""}`}
-              onClick={() => onRoundClick(round)}
-              style={{ cursor: currentRound === round ? "pointer" : "default" }}
             >
               {currentRound === round ? (
                 <>

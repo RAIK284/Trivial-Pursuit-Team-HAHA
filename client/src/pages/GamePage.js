@@ -5,12 +5,12 @@ import lobbyBackground from "../assets/img/space-saucer-bg.jpg";
 import tempWheel from "../assets/img/Blank.png";
 import "../styles/GamePage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
-import useStore from "../hooks/useStore";
+import useRegister from "../hooks/useRegister";
 import TimerBar from "../components/TimerBar";
 import LoadingBar from "../components/LoadingBar";
 
 const GamePage = () => {
-  const { username } = useStore();
+  const { username } = useRegister();
   const { gameSession } = useParams();
   const [players, setPlayers] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -237,10 +237,7 @@ const GamePage = () => {
               </div>
             </>
           ) : (
-            <div className="round-over-message">
-              Round Over <br />
-              Game Results Will Be Shown <br />
-              Then The Next Round Will Start
+            <div>
             </div>
           )}
         </div>

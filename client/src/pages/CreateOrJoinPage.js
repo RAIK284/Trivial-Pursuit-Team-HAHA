@@ -2,33 +2,20 @@ import React, { useEffect, useState } from "react";
 import ShortUniqueId from "short-unique-id";
 import { useNavigate } from "react-router-dom";
 import "../styles/CreateOrJoinPage.css";
-import useStore from "../hooks/useStore";
+import useRegister from "../hooks/useRegister";
+import useGameSession from "../hooks/useGameSession";
 
 const CreateOrJoinPage = () => {
   const navigate = useNavigate();
   const { randomUUID } = new ShortUniqueId({ length: 5 });
-  const { username, loading } = useStore();
-  const [room, setRoom] = useState("");
+  const { username } = useRegister();
+  const { handleGameSession } = useGameSession();
+
   const createRoom = () => {
     const newGameSession = randomUUID();
     handleGameSession(newGameSession).then(() => {
       navigate(`/lobby/${newGameSession}`);
     });
-  };
-
-  const handleGameSession = async (gameSession) => {
-    try {
-      await fetch("http://localhost:5000/createsession", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ gamesession: gameSession }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   return (

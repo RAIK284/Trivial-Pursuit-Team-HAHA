@@ -1,36 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { IoIosRocket } from "react-icons/io";
 import "../styles/JoinGamePage.css";
-
+import useGameSession from "../hooks/useGameSession";
 const JoinGamePage = () => {
-  const [sessionId, setSessionId] = useState("");
-  const navigate = useNavigate();
-
-  const joinRoom = async (e) => {
-    e.preventDefault();
-    if (sessionId) {
-      try {
-        const res = await fetch("http://localhost:5000/sessionExists", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ sessionId }),
-        });
-
-        const data = await res.json();
-        if (data.exists) {
-          navigate(`/lobby/${sessionId}`);
-        } else {
-          alert("This room does not exist.");
-        }
-      } catch (err) {
-        console.error("Error checking session existence:", err);
-      }
-    }
-  };
+  const { joinRoom, sessionId, setSessionId } = useGameSession();
 
   return (
     <div className="join-game-container">
@@ -38,9 +11,7 @@ const JoinGamePage = () => {
 
       <div className="join-button-input-container">
         <div class="text-input-container">
-          <span class="join-game-text">
-            Enter The Trivial Pursuit!
-          </span>
+          <span class="join-game-text">Enter The Trivial Pursuit!</span>
           <form className="join-game-form" onSubmit={joinRoom}>
             <input
               className="join-page-input"
