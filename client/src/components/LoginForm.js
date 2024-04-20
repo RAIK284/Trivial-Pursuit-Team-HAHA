@@ -5,43 +5,14 @@ import { MdLock } from "react-icons/md";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoMdEye } from "react-icons/io";
 import { Link } from "react-router-dom";
-
+import useLogin from "../hooks/useLogin";
 const LoginForm = () => {
   const [passwordHidden, setpasswordHidden] = useState(true);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch("http://localhost:5000/login-user", {
-        method: "POST",
-        crossDomain: true,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-      console.log(data, "userLogin");
-      if (data.status === "ok") {
-        window.localStorage.setItem("token", data.data);
-        window.location.href = "./create-or-join-game";
-      } else {
-        setError(data.error);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { setUsername, setPassword, error, handleSubmit } = useLogin();
 
   return (
     <div className="login-form-container">
-    <div className="trivial-pursuit">Trivial Pursuit</div>
+      <div className="trivial-pursuit">Trivial Pursuit</div>
       <form onSubmit={handleSubmit} className="login-form">
         <h1 className="login-header">Login</h1>
         <div className="input-1">
