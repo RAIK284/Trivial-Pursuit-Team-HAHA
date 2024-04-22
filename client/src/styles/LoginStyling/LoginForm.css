@@ -118,15 +118,13 @@
   flex-direction: column;
 }
 
-.eye-icon-closed,
-.eye-icon-open {
+.eye-icon {
   margin-left: 3.5rem;
   cursor: pointer;
   transition: all 300ms;
 }
 
-.eye-icon-closed:hover,
-.eye-icon-open:hover {
+.eye-icon:hover {
   color: var(--planet-orange);
 }
 

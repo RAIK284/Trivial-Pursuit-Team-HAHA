@@ -198,7 +198,7 @@ const GamePage = () => {
   }
 
   return (
-    <div className="game-page-container">
+    <div data-testid="game-page" className="game-page-container">
       <div>
         <img className="lobby-bg" alt="background" src={lobbyBackground} />
         <div>
@@ -206,19 +206,19 @@ const GamePage = () => {
           questions.length > 0 &&
           questionIndex < numFetched ? (
             <>
-              <div className="question-header">
+              <div data-testid="question" className="question-header">
                 {questions[questionIndex].question}
               </div>
               <div className="question-timer">
                 <TimerBar
-                  width={2000}
+                  width={2570}
                   height={10}
                   percentage={(visibleTimer / 5000) * 100}
                 />
               </div>
               <div className="question-choices-container">
                 {shuffledAnswers.map((answerChoices, index) => (
-                  <div
+                  <div data-testid="question-choices"
                     className={`question-choices question-choice-${index + 1} ${
                       answerRevealed
                         ? answerChoices.isCorrect
@@ -258,7 +258,7 @@ const GamePage = () => {
                   />
                   <div className="name-score-container">
                     <div className="Game-player-name">{player.playerName}</div>
-                    <div className="game-score">
+                    <div data-testid="score" className="game-score">
                       Score: {scores[player.playerName] || 0}
                     </div>
                   </div>

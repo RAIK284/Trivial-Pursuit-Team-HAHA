@@ -5,7 +5,7 @@ import "../styles/LoginStyling/LoginForm.css";
 
 const LoginPage = () => {
   return (
-    <div className="login">
+    <div data-testid="login-page" className="login">
       <img alt="background" className="login-bg-img" src={loginBackground} />
       <LoginForm />
     </div>

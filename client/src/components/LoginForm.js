@@ -13,7 +13,7 @@ const LoginForm = () => {
   return (
     <div className="login-form-container">
       <div className="trivial-pursuit">Trivial Pursuit</div>
-      <form onSubmit={handleSubmit} className="login-form">
+      <form data-testid="login-form" onSubmit={handleSubmit} className="login-form">
         <h1 className="login-header">Login</h1>
         <div className="input-1">
           <div className="username-container">
@@ -46,13 +46,13 @@ const LoginForm = () => {
               {passwordHidden ? (
                 <IoMdEyeOff
                   onClick={setpasswordHidden}
-                  className="eye-icon-closed"
+                  className="eye-icon"
                   size={19}
                 />
               ) : (
                 <IoMdEye
                   onClick={setpasswordHidden}
-                  className="eye-icon-open"
+                  className="eye-icon"
                   size={19}
                 />
               )}
@@ -63,7 +63,7 @@ const LoginForm = () => {
         </div>
         <span className="forgot-password">Forgot Password?</span>
 
-        <button type="submit" className="login-button">
+        <button data-testid="login-button" type="submit" className="login-button">
           Login
         </button>
 
