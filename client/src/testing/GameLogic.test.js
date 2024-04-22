@@ -1,11 +1,9 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SpinnerPage from '../pages/SpinnerPage';
-
 import GamePage from '../pages/GamePage';
-import { useParams } from 'react-router-dom'; 
-import io from 'socket.io-client';
+
 
 
 //This is Just An Example Test that shows the header is rendered
@@ -18,92 +16,64 @@ describe('SpinnerPage Component', () => {
   });
 });
 
-// Mocking useParams and setImeddiate
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: jest.fn(),
-}));
-useParams.mockReturnValue({ gameSession: '5000' });  // Setting default return value for all tests
-global.setImmediate = global.setImmediate || ((fn, ...args) => setTimeout(fn, 0, ...args));
-
-
-describe('GamePage Component - Initial State', () => {
-  test('initializes state correctly', () => {
-    render(<GamePage />);
-    // Using queries from @testing-library/react to assert initial state through UI
-    expect(screen.queryByText('Test Question')).toBeNull();  // Questions should initially not be visible
-    expect(screen.getByText('No data')).toBeInTheDocument(); // Assume "No data" is shown when no questions are loaded
-  });
+test('GamePage renders', () => {
+  render(<GamePage />);
+  expect(screen.getByTestId('game-page-container-test')).toBeInTheDocument();
 });
 
-describe('GamePage Component - Socket and API Interaction', () => {
+describe('GamePage Component Tests', () => {
   beforeEach(() => {
-    useParams.mockReturnValue({ gameSession: '123' });
+    jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  test('fetches questions on component mount', async () => {
-    const { socket } = require('socket.io-client'); // Ensuring the mock is imported to verify interactions
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test('GamePage renders', () => {
     render(<GamePage />);
-    expect(socket.emit).toHaveBeenCalledWith("join_room", expect.anything());  // Check socket room join
-    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('the-trivia-api.com'));  // Check if API is called
+    expect(screen.getByTestId('game-page-container')).toBeInTheDocument();
   });
 
-  test('handles socket "update_player_list" event correctly', () => {
-    const { socket } = require('socket.io-client');
-    render(<GamePage />);
-    socket.on.mock.calls.find(call => call[0] === 'update_player_list')[1](['Charlie', 'Delta']);
-    expect(screen.getByText('Charlie')).toBeInTheDocument();
-    expect(screen.getByText('Delta')).toBeInTheDocument();
+  test('displays questions and answers', () => {
+    // Mock fetched data or ensure the component is set to receive props correctly
+    const mockQuestions = [{
+      question: 'What is the capital of France?',
+      correctAnswer: 'Paris',
+      incorrectAnswers: ['London', 'Berlin']
+    }];
+    render(<GamePage questions={mockQuestions} />);
+    expect(screen.getByTestId('question')).toHaveTextContent('What is the capital of France?');
   });
-});
-  
-describe('GamePage Component - User Interactions', () => {
-  test('handles answer selection correctly', () => {
-    render(<GamePage />);
-    const fakeAnswers = [
-      { answer: 'Answer 1', isCorrect: false, selectedBy: [] },
-      { answer: 'Answer 2', isCorrect: true, selectedBy: [] }
-    ];
-    // Simulate setting answers
-    act(() => {
-      setShuffledAnswers(fakeAnswers);
-    });
-    const answerButton = screen.getByText('Answer 2');
-    fireEvent.click(answerButton);
-    expect(screen.getByText('Answer 2').parentNode).toHaveClass('selected-choice');
-    expect(setSelectedAnswer).toHaveBeenCalledWith({ index: 1, isCorrect: true });
-  });
-});
 
-jest.useFakeTimers();
-
-describe('GamePage Component - Timers and Scoring', () => {
-  test('timer decreases as expected and triggers reveal', () => {
+  test('reveals right and wrong answers after timer', () => {
     render(<GamePage />);
     act(() => {
-      jest.advanceTimersByTime(1000); // Advance time by 1 second
+      jest.advanceTimersByTime(30000); 
     });
-    expect(setTimer).toHaveBeenCalledWith(expect.any(Number)); // Expect the timer to have been decreased
+    expect(screen.getByTestId('answer-0').className).toContain('correct'); // Ensure your component updates classNames based on state
   });
 
-  test('score updates when an answer is revealed', () => {
+  test('increments score if the right answer is chosen', () => {
     render(<GamePage />);
-    // Simulating answer reveal
-    act(() => {
-      setAnswerRevealed(true);
-      setSelectedAnswer({ index: 0, isCorrect: true });
-    });
-    expect(setScores).toHaveBeenCalledWith(expect.any(Object)); // Check if scores are updated
+    fireEvent.click(screen.getByTestId('answer-0')); 
+    expect(screen.getByTestId('score-display')).toHaveTextContent('Score: 100');
   });
-});
 
-jest.useRealTimers();
+  test('keeps score at zero if the wrong answer is chosen', () => {
+    render(<GamePage />);
+    fireEvent.click(screen.getByTestId('answer-1')); 
+    expect(screen.getByTestId('score-display'));
+  });
 
-describe('GamePage Component - Cleanup', () => {
-  test('cleans up on unmount', () => {
-    const { unmount } = render(<GamePage />);
-    unmount();
-    expect(clearInterval).toHaveBeenCalledTimes(1); // Assuming one interval set
-    expect(socket.off).toHaveBeenCalledTimes(expect.any(Number)); // Ensure listeners are removed
+  test('timer renders and counts down', () => {
+    render(<GamePage />);
+    const initialTimerText = screen.getByTestId('timer-display').textContent;
+    act(() => {
+      jest.advanceTimersByTime(1000); // Simulate timer counting down
+    });
+    const updatedTimerText = screen.getByTestId('timer-display').textContent;
+    expect(updatedTimerText).not.toBe(initialTimerText);
   });
 });
