@@ -206,19 +206,19 @@ const GamePage = () => {
           questions.length > 0 &&
           questionIndex < numFetched ? (
             <>
-              <div className="question-header">
+              <div data-testid="question" className="question-header">
                 {questions[questionIndex].question}
               </div>
               <div className="question-timer">
                 <TimerBar
-                  width={2000}
+                  width={2570}
                   height={10}
                   percentage={(visibleTimer / 5000) * 100}
                 />
               </div>
               <div className="question-choices-container">
                 {shuffledAnswers.map((answerChoices, index) => (
-                  <div data-testid="questions"
+                  <div data-testid="question-choices"
                     className={`question-choices question-choice-${index + 1} ${
                       answerRevealed
                         ? answerChoices.isCorrect

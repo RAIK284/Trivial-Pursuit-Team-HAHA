@@ -8,7 +8,7 @@ import LoginPage from "../pages/LoginPage";
 
 describe("UserTests", () => {
   beforeAll(() => {
-    // Shows Possible JSON errors for Fetching
+    // Shows Possible JSON errors for Fetching when Mocking
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
@@ -16,7 +16,7 @@ describe("UserTests", () => {
     // Restore the Errors after logged to the console
     console.error.mockRestore();
   });
-  
+
   // Register Tests
   it("Renders the Register Page Correctly", () => {
     render(
@@ -26,6 +26,7 @@ describe("UserTests", () => {
     );
     const backgroundImage = screen.getByAltText("background");
     expect(backgroundImage).toBeInTheDocument();
+    expect(screen.getByTestId("register-page")).toBeInTheDocument();
   });
 
   it("Renders the Register Form Correctly", () => {
@@ -152,6 +153,7 @@ describe("UserTests", () => {
     );
     const backgroundImage = screen.getByAltText("background");
     expect(backgroundImage).toBeInTheDocument();
+    expect(screen.getByTestId("login-page")).toBeInTheDocument();
   });
 
   it("Renders the Login Form Correctly", () => {

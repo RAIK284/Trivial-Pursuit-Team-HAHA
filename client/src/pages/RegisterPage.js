@@ -5,7 +5,7 @@ import RegisterForm from "../components/RegisterForm";
 
 const RegisterPage = () => {
   return (
-    <div className="login">
+    <div data-testid="register-page" className="login">
       <img alt="background" className="login-bg-img" src={registerBackground} />
       <RegisterForm />
     </div>

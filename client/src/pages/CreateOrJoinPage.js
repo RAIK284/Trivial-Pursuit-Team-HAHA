@@ -22,7 +22,7 @@ const CreateOrJoinPage = () => {
     <div data-testid="create-page" className="create-or-join-page">
       <h1 className="game-portal-header">
         Welcome to the Game Portal{" "}
-        <span class="create-or-join-username">{username}</span>
+        <span className="create-or-join-username">{username}</span>
       </h1>
       <div className="buttons-container">
         <div className="button-block">
@@ -30,7 +30,7 @@ const CreateOrJoinPage = () => {
             src="https://images.vexels.com/media/users/3/249681/isolated/preview/2e033ab207c08313f20bf7478f0b064b-90-s-arcade-color-stroke.png"
             alt="Start Game Icon"
           />
-          <button onClick={createRoom} className="create-button">
+          <button data-testid="new-game-button"  onClick={createRoom} className="create-button">
             NEW GAME{" "}
           </button>
         </div>

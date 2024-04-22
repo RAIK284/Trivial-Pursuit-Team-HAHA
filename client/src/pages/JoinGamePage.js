@@ -10,8 +10,8 @@ const JoinGamePage = () => {
       <h1 className="join-game-header">Join Game</h1>
 
       <div className="join-button-input-container">
-        <div class="text-input-container">
-          <span class="join-game-text">Enter The Trivial Pursuit!</span>
+        <div className="text-input-container">
+          <span className="join-game-text">Enter The Trivial Pursuit!</span>
           <form className="join-game-form" onSubmit={joinRoom}>
             <input
               className="join-page-input"
