@@ -53,7 +53,7 @@ const LobbyPage = () => {
         >
           Start Game
         </button>
-        <p className="session-id">Session ID: {gameSession}</p>
+        { gameSession && <p className="session-id">Session ID: <span data-testid="gameSession">{gameSession}</span></p>}
       </div>
 
       <div className="chat-room-container">

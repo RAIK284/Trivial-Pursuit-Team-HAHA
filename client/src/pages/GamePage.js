@@ -258,7 +258,7 @@ const GamePage = () => {
                   />
                   <div className="name-score-container">
                     <div className="Game-player-name">{player.playerName}</div>
-                    <div className="game-score">
+                    <div data-testid="score" className="game-score">
                       Score: {scores[player.playerName] || 0}
                     </div>
                   </div>

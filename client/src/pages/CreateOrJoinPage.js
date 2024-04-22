@@ -40,6 +40,7 @@ const CreateOrJoinPage = () => {
             alt="Join Game Icon"
           />
           <button
+          data-testid="join-game-button"
             onClick={() => {
               navigate("/join");
             }}
