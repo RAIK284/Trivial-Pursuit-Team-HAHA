@@ -198,7 +198,7 @@ const GamePage = () => {
   }
 
   return (
-    <div className="game-page-container">
+    <div data-testid="game-page" className="game-page-container">
       <div>
         <img className="lobby-bg" alt="background" src={lobbyBackground} />
         <div>
@@ -218,7 +218,7 @@ const GamePage = () => {
               </div>
               <div className="question-choices-container">
                 {shuffledAnswers.map((answerChoices, index) => (
-                  <div
+                  <div data-testid="questions"
                     className={`question-choices question-choice-${index + 1} ${
                       answerRevealed
                         ? answerChoices.isCorrect

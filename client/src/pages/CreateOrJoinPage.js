@@ -19,7 +19,7 @@ const CreateOrJoinPage = () => {
   };
 
   return (
-    <div className="create-or-join-page">
+    <div data-testid="create-page" className="create-or-join-page">
       <h1 className="game-portal-header">
         Welcome to the Game Portal{" "}
         <span class="create-or-join-username">{username}</span>

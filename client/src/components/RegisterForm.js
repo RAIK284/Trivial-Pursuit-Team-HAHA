@@ -30,7 +30,7 @@ const RegisterForm = () => {
   return (
     <div className="register-form-container">
       {success && (
-        <div onClick={() => navigate("/login")} className="register-success">
+        <div data-testid="success-toast" onClick={() => navigate("/login")} className="register-success">
           <FaCircleCheck size={20} />
           Your Account was Successfully Created! Tap here to log in.
           <FaCircleXmark
@@ -44,6 +44,7 @@ const RegisterForm = () => {
         </div>
       )}
       <form
+        data-testid="register-form"
         onSubmit={(e) => {
           e.preventDefault();
           handleRegister();
@@ -64,7 +65,7 @@ const RegisterForm = () => {
           </div>
           <div className="underline" />
           {usernameError && (
-            <span className="error-message">{usernameError}</span>
+            <span data-testid="username-error" className="error-message">{usernameError}</span>
           )}
         </div>
         <div className="input-2">
@@ -107,10 +108,14 @@ const RegisterForm = () => {
           <div className="underline" />
         </div>
         {passwordError && (
-          <span className="error-message">{passwordError}</span>
+          <span data-testid="password-error" className="error-message">{passwordError}</span>
         )}
 
-        <button type="submit" className="login-button">
+        <button
+          data-testid="register-button"
+          type="submit"
+          className="login-button"
+        >
           Register
         </button>
         <div className="register-container">
