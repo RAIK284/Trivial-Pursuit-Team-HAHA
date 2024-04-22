@@ -198,7 +198,7 @@ const GamePage = () => {
   }
 
   return (
-    <div className="game-page-container">
+    <div className="game-page-container" data-testid="game-page-container-test">
       <div>
         <img className="lobby-bg" alt="background" src={lobbyBackground} />
         <div>
@@ -206,10 +206,10 @@ const GamePage = () => {
           questions.length > 0 &&
           questionIndex < numFetched ? (
             <>
-              <div className="question-header">
+              <div className="question-header" data-testid="question-header">
                 {questions[questionIndex].question}
               </div>
-              <div className="question-timer">
+              <div className="question-timer" data-testid="timer-display">
                 <TimerBar
                   width={2000}
                   height={10}
