@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import fetchMock from "jest-fetch-mock";
 import GamePage from "../pages/GamePage";
 import CreateOrJoinPage from "../pages/CreateOrJoinPage";
 
