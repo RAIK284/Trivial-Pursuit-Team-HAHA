@@ -8,6 +8,7 @@ import CreateOrJoinPage from "./pages/CreateOrJoinPage";
 import GamePage from "./pages/GamePage";
 import RoundPage from "./pages/Round";
 import JoinGamePage from "./pages/JoinGamePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route path="/game/:gameSession" element={<GamePage />} />
         <Route path="/round/:gameSession" element={<RoundPage />} />
         <Route path="/join" element={<JoinGamePage />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
+
       </Routes>
     </Router>
   );

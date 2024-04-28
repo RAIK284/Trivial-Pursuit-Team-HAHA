@@ -23,7 +23,97 @@ const GamePage = () => {
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
   const [socket, setSocket] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
-  let numFetched = 7;
+  let numFetched = 2;
+
+  useEffect(() => {
+    const newSocket = io.connect("http://localhost:5000");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.close();
+      newSocket.off("score_updated");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (socket && username) {
+      socket.emit("join_room", { user: username, room: gameSession });
+      setScores({ [username]: 0 }); // Reset the current game score to 0
+
+      socket.on("update_player_list", (playerList) => {
+        const updatedPlayers = playerList.map((playerName, index) => ({
+          playerName,
+          playerColor: playerColors[index % playerColors.length],
+        }));
+        setPlayers(updatedPlayers);
+      });
+
+      const fetchQuestions = async () => {
+        const response = await fetch(
+          `https://the-trivia-api.com/api/questions?categories=history&limit=${numFetched}`
+        );
+        const data = await response.json();
+        setQuestions(data);
+        socket.emit("create_questions", { questions: data, room: gameSession });
+      };
+
+      fetchQuestions();
+    }
+  }, [socket, username, gameSession]);
+
+  useEffect(() => {
+    if (questions.length > 0 && questionIndex < questions.length) {
+      const currentQuestion = questions[questionIndex];
+      const combinedAnswers = [
+        {
+          answer: currentQuestion.correctAnswer,
+          isCorrect: true,
+          selectedBy: [],
+        },
+        ...currentQuestion.incorrectAnswers.map((incorrect) => ({
+          answer: incorrect,
+          isCorrect: false,
+          selectedBy: [],
+        })),
+      ];
+
+      setShuffledAnswers(shuffleArray(combinedAnswers));
+    }
+  }, [questionIndex, questions]);
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 50);
+        if (visibleTimer > 0) {
+          setVisibleTimer((prevVisibleTimer) =>
+            Math.max(prevVisibleTimer - 50, 0)
+          );
+        }
+      }, 50);
+
+      return () => clearInterval(interval);
+    } else {
+      setAnswerRevealed(true);
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    if (answerRevealed && selectedAnswer !== null) {
+      setTimeout(() => {
+        if (selectedAnswer.isCorrect) {
+          const updatedScore = (scores[username] || 0) + 100;
+          setScores({ ...scores, [username]: updatedScore });
+        }
+
+        setSelectedAnswer(null);
+        setAnswerRevealed(false);
+        setQuestionIndex(questionIndex + 1);
+        setTimer(5050);
+        setVisibleTimer(5000);
+      }, 2000);
+    }
+  }, [answerRevealed, selectedAnswer]);
 
   const handleClick = (answerChoices, index) => {
     if (!answerRevealed) {
@@ -47,143 +137,6 @@ const GamePage = () => {
       });
     }
   };
-
-  useEffect(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 50);
-        if (visibleTimer > 0) {
-          setVisibleTimer((prevVisibleTimer) =>
-            Math.max(prevVisibleTimer - 50, 0)
-          );
-        }
-      }, 50);
-
-      return () => clearInterval(interval);
-    } else {
-      setAnswerRevealed(true);
-    }
-  }, [timer]);
-
-  useEffect(() => {
-    if (answerRevealed && selectedAnswer !== null) {
-      const updatedScore =
-        (scores[username] || 0) + (selectedAnswer.isCorrect ? 100 : 0);
-      setScores({ ...scores, [username]: updatedScore });
-
-      socket.emit("update_score", {
-        user: username,
-        score: updatedScore,
-        room: gameSession,
-      });
-
-      setTimeout(() => {
-        setSelectedAnswer(null);
-        setAnswerRevealed(false);
-        setQuestionIndex(questionIndex + 1);
-        setTimer(5050);
-        setVisibleTimer(5000);
-      }, 2000);
-    } else {
-      if (answerRevealed) {
-        setTimeout(() => {
-          setSelectedAnswer(null);
-          setAnswerRevealed(false);
-          setQuestionIndex(questionIndex + 1);
-          setTimer(5050);
-          setVisibleTimer(5000);
-        }, 2000);
-      }
-    }
-  }, [answerRevealed, selectedAnswer]);
-
-  useEffect(() => {
-    const newSocket = io.connect("http://localhost:5000");
-    setSocket(newSocket);
-    return () => newSocket.close();
-  }, []);
-
-  useEffect(() => {
-    if (socket && username) {
-      socket.emit("join_room", { user: username, room: gameSession });
-
-      socket.on("update_player_list", (playerList) => {
-        const updatedPlayers = playerList.map((playerName, index) => ({
-          playerName,
-          playerColor: playerColors[index % playerColors.length],
-        }));
-        setPlayers(updatedPlayers);
-      });
-
-      const fetchQuestions = async () => {
-        const response = await fetch(
-          `https://the-trivia-api.com/api/questions?categories=history&limit=${numFetched}`
-        );
-        const data = await response.json();
-        setQuestions(data);
-        socket.emit("create_questions", { questions: data, room: gameSession });
-      };
-
-      fetchQuestions();
-
-      socket.on("questions_created", (data) => {
-        setQuestions(data.questions);
-        if (data.questions.length > 0) {
-          const combinedAnswers = [
-            {
-              answer: data.questions[0].correctAnswer,
-              isCorrect: true,
-              selectedBy: [],
-            },
-            ...data.questions[0].incorrectAnswers.map((incorrect) => ({
-              answer: incorrect,
-              isCorrect: false,
-              selectedBy: [],
-            })),
-          ];
-
-          setShuffledAnswers(shuffleArray(combinedAnswers));
-          setTimer(5050);
-          setVisibleTimer(5000);
-          setAnswerRevealed(false);
-          setSelectedAnswer(null);
-        }
-      });
-
-      socket.on("score_updated", ({ user, score }) => {
-        setScores((prevScores) => ({
-          ...prevScores,
-          [user]: score,
-        }));
-      });
-
-      return () => {
-        socket.emit("leave_room", { room: gameSession, user: username });
-        socket.off("update_player_list");
-        socket.off("questions_created");
-      };
-    }
-  }, [socket, username, gameSession]);
-
-  useEffect(() => {
-    if (questions.length > 0 && questionIndex < questions.length) {
-      const currentQuestion = questions[questionIndex];
-      const combinedAnswers = [
-        {
-          answer: currentQuestion.correctAnswer,
-          isCorrect: true,
-          selectedBy: [],
-        },
-        ...currentQuestion.incorrectAnswers.map((incorrect) => ({
-          answer: incorrect,
-          isCorrect: false,
-          selectedBy: [],
-        })),
-      ];
-
-      setShuffledAnswers(shuffleArray(combinedAnswers));
-    }
-  }, [questionIndex, questions]);
 
   function shuffleArray(array) {
     const shuffledArray = array.slice();
@@ -218,7 +171,8 @@ const GamePage = () => {
               </div>
               <div className="question-choices-container">
                 {shuffledAnswers.map((answerChoices, index) => (
-                  <div data-testid="question-choices"
+                  <div
+                    data-testid="question-choices"
                     className={`question-choices question-choice-${index + 1} ${
                       answerRevealed
                         ? answerChoices.isCorrect
@@ -237,8 +191,7 @@ const GamePage = () => {
               </div>
             </>
           ) : (
-            <div>
-            </div>
+            <div></div>
           )}
         </div>
       </div>
@@ -276,4 +229,5 @@ const GamePage = () => {
     </div>
   );
 };
+
 export default GamePage;

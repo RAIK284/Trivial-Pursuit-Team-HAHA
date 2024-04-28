@@ -52,12 +52,12 @@ app.post("/login-user", async (req, res) => {
   const user = await User.findOne({ username });
 
   if (!user) {
-    return res.status(404).json({ error: "That User Does Not Exist" }); // Use 404 for not found
+    return res.status(404).json({ error: "That User Does Not Exist" }); 
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    return res.status(401).json({ error: "Incorrect Password" }); // Use 401 for unauthorized
+    return res.status(401).json({ error: "Incorrect Password" }); 
   }
 
   const token = jwt.sign({ username: user.username }, JWT_SECRET);
@@ -79,7 +79,32 @@ app.post("/userData", async (req, res) => {
   } catch (error) {}
 });
 
-//Creates the Server for Game Sessions
+// Update User Score
+app.post("/update-score", async (req, res) => {
+  const { username, score } = req.body;
+
+  if (!score || score < 0) {
+    return res.status(400).json({ error: "Invalid score value provided." });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { username: username },
+      { $inc: { total_score: score } }, 
+      { new: true } 
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    return res.status(200).json({ status: "ok", new_total_score: user.total_score });
+  } catch (error) {
+    console.error("Failed to update score:", error);
+    return res.status(500).json({ status: "error", message: "Internal server error." });
+  }
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -87,6 +112,22 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+
+// Finds top Scores
+
+app.get('/api/top-scores', async (req, res) => {
+  try {
+    const topUsers = await User.find()
+      .sort({ total_score: -1 })  
+      .limit(10)                  
+      .select('username total_score'); 
+    res.json(topUsers);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching top scores', error: error.message });
+  }
+});
+
 
 const roomPlayers = {};
 
@@ -105,7 +146,7 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", async (data) => {
     socket.join(data.room);
-    socket.username = data.user; // Store the username on the socket for later reference
+    socket.username = data.user; 
 
     if (!roomPlayers[data.room]) {
       roomPlayers[data.room] = [];
@@ -114,7 +155,6 @@ io.on("connection", (socket) => {
       roomPlayers[data.room].push(data.user);
     }
 
-    // Emit the updated player list to all clients in the room, including the new joiner
     io.to(data.room).emit("update_player_list", roomPlayers[data.room]);
   });
 
@@ -129,35 +169,57 @@ io.on("connection", (socket) => {
     io.to(data.room).emit("navigate_to_game");
   });
 
-  socket.on("answer_clicked", (data) => {
-    io.to(data.room).emit("click_recieved", data);
-  });
+  socket.on("answer_clicked", async (data) => {
+    const scoreToAdd = data.isCorrect ? 500 : 0;
+
+    const user = await User.findOneAndUpdate(
+      { username: data.clickedBy },
+      { $inc: { total_score: scoreToAdd } },
+      { new: true }
+    );
+
+    if (user) {
+        io.to(data.room).emit("score_updated", {
+            user: data.clickedBy,
+            score: user.total_score  
+        });
+    }
+});
+
+socket.on("update_score", async ({ user, score, room }) => {
+  const userDoc = await User.findOneAndUpdate(
+    { username: user },
+    { $set: { total_score: score } },
+    { new: true }
+  );
+  
+  io.to(room).emit("score_updated", { user: user, score: userDoc.total_score });
+});
+
 
   socket.on("create_questions", (data) => {
     io.to(data.room).emit("questions_created", data);
   });
 
-  socket.on("update_score", ({ user, score, room }) => {
-    io.to(room).emit("score_updated", { user, score });
-  });
+
+  
+  
   socket.on("disconnecting", () => {
-    // Get the list of rooms the socket is currently subscribed to, excluding the socket's own ID
     const rooms = Array.from(socket.rooms).filter((item) => item !== socket.id);
 
     rooms.forEach((room) => {
-      const username = socket.username; // Retrieve the username stored on the socket
+      const username = socket.username; 
 
-      // Remove the user from the room's player list
       const index = roomPlayers[room].indexOf(username);
       if (index !== -1) {
         roomPlayers[room].splice(index, 1);
 
-        // Emit the updated player list to all clients still in the room
         io.to(room).emit("update_player_list", roomPlayers[room]);
       }
     });
   });
 });
+
 
 server.listen(5000, () => {
   console.log("Server is Running");
