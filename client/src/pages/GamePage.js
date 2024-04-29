@@ -237,14 +237,23 @@ const GamePage = () => {
               </div>
             </>
           ) : (
-            <div className="round-over-message">
-              Round Over <br />
-              Game Results Will Be Shown <br />
-              Then The Next Round Will Start
+            <div className="player-scores">
+              {players.map((player, index) => (
+                <div key={index} className="player-score">
+                  <IoPersonCircleSharp
+                    className="player-icon"
+                    style={{ color: player.playerColor }}
+                  />
+                  <span className="player-name">{player.playerName}</span> -{" "}
+                  <span className="player-score-value">
+                    {scores[player.playerName] || 0}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
-        </div>
       </div>
+    </div>
 
       {questionIndex < numFetched && (
         <div className="player-question-container">
