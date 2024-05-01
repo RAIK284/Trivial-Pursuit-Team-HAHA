@@ -1,8 +1,6 @@
 import React from "react";
 import useTopScores from "../hooks/useTopScores";
 
-
-// HELP: WHERE ELSE IS LEADERBOARD PAGE????
 const LeaderboardPage = () => {
   const { topScores, isLoading, error } = useTopScores();
 
