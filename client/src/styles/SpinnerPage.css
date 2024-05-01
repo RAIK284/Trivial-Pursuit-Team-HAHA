@@ -1,0 +1,58 @@
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.title-container {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #AA65FF;
+  font-size: 30px;
+  color: white;
+  z-index: 10;
+}
+
+.spinner {
+  width: 500px;
+  height: 500px;
+  position: relative;
+  margin: auto;
+  cursor: pointer;
+  transition: transform 2s cubic-bezier(.33, .67, .66, 1);
+  border-radius: 50%; 
+  transform-origin: center; 
+  background-color: #AA65FF;
+}
+
+.slice {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 25%;
+  background-size: 25%, contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform-origin: center; 
+  clip-path: polygon(50% 50%, 0% 100%, 100% 100%); 
+  
+}
+
+.logo {
+  width: 50%; 
+  height: 30%; 
+  position: absolute;
+  top: 80%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  pointer-events: none; 
+}
