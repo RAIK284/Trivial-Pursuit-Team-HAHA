@@ -1,6 +1,6 @@
 import React from "react";
 import registerBackground from "../assets/img/space-planets-bg.jpg";
-import "../styles/LoginStyling/LoginForm.css";
+import "../styles/LoginForm.css";
 import RegisterForm from "../components/RegisterForm";
 
 const RegisterPage = () => {

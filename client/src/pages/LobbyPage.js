@@ -5,7 +5,7 @@ import "../styles/LobbyPage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { LuSendHorizonal } from "react-icons/lu";
 import useRegister from "../hooks/useRegister";
-import useSocket from "../hooks/useSocket"; 
+import useLobbySocket from "../hooks/useLobbySocket"; 
 
 const LobbyPage = () => {
   const { gameSession } = useParams();
@@ -13,7 +13,7 @@ const LobbyPage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
 
-  const { messages, players, startGame, sendMessage } = useSocket(gameSession, username);
+  const { messages, players, startGame, sendMessage } = useLobbySocket(gameSession, username);
 
   const coloredPlayers = players.map((playerName, index) => ({
     playerName,

@@ -1,7 +1,7 @@
 import React from "react";
 
 const TimerBar = ({ width, height, percentage }) => {
-  const fillWidth = (percentage / 100) * width;
+  const fillWidth = (percentage / 100) * width - 50;
 
   return (
     <svg width="100%" height={height}>

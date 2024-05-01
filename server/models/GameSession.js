@@ -9,4 +9,5 @@ const gameSessionSchema = new mongoose.Schema(
   }
 );
 
-mongoose.model('GameSessionInfo', gameSessionSchema);
+const GameSession = mongoose.model("GameSessionInfo", gameSessionSchema);
+module.exports = GameSession;
