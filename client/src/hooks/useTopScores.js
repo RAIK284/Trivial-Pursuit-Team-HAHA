@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useTopScores = () => {
   const [topScores, setTopScores] = useState([]);
@@ -8,12 +8,13 @@ const useTopScores = () => {
   useEffect(() => {
     const fetchTopScores = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/top-scores');
+        const response = await fetch("http://localhost:5000/top-scores");
         if (!response.ok) {
-          throw new Error('Network response invalid');
+          throw new Error("Network response invalid");
         }
         const data = await response.json();
         setTopScores(data);
+        console.log('HERE',data);
       } catch (err) {
         setError(err.message);
       } finally {

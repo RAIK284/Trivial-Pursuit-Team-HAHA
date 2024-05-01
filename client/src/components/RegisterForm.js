@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/LoginStyling/LoginForm.css";
+import "../styles/LoginForm.css";
 import { IoPerson } from "react-icons/io5";
 import { MdLock } from "react-icons/md";
 import { IoMdEyeOff } from "react-icons/io";

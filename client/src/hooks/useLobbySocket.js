@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
-const useSocket = (gameSession, username) => {
+const useLobbySocket = (gameSession, username) => {
   const socket = useMemo(() => io.connect("http://localhost:5000"), []);
 
   const [messages, setMessages] = useState([]);
@@ -57,4 +57,4 @@ const useSocket = (gameSession, username) => {
   };
 };
 
-export default useSocket;
+export default useLobbySocket;
