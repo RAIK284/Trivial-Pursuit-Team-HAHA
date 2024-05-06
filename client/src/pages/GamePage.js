@@ -23,7 +23,7 @@ const GamePage = () => {
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
   const [socket, setSocket] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
-  let numFetched = 7;
+  let numFetched = 2;
 
   const handleClick = (answerChoices, index) => {
     if (!answerRevealed) {
