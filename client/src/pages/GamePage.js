@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import lobbyBackground from "../assets/img/space-saucer-bg.jpg";
 import "../styles/GamePage.css";
@@ -9,13 +9,15 @@ import TimerBar from "../components/TimerBar";
 import PlayerContainer from "../components/PlayerContainer";
 import QuestionChoices from "../components/QuestionChoices";
 import tempWheel from "../assets/img/Blank.png";
+import History from "../assets/img/history.png";
 
 const GamePage = () => {
   const { username } = useRegister();
   const { gameSession } = useParams();
   const [players, setPlayers] = useState([]);
   const [aiScoresSet, setAiScoresSet] = useState(false);
-
+  const location = useLocation();
+  const category = location.state?.category || "defaultCategory";
   const [aiPlayers, setAiPlayers] = useState(() => {
     const storedAiPlayers = localStorage.getItem("aiPlayers");
     return storedAiPlayers
@@ -79,11 +81,11 @@ const GamePage = () => {
       });
       fetchQuestions();
     }
-  }, [socket, username, gameSession, aiPlayers]);
+  }, [socket, username, gameSession, aiPlayers, category]);
 
   const fetchQuestions = async () => {
     const response = await fetch(
-      `https://the-trivia-api.com/api/questions?categories=history&limit=${numFetched}`
+      `https://the-trivia-api.com/api/questions?categories=${category}&limit=${numFetched}`
     );
     const data = await response.json();
     setQuestions(data);
@@ -201,6 +203,7 @@ const GamePage = () => {
           <>
             <div className="question-container">
               <div data-testid="question" className="question-header">
+                <img style={{height: "6rem"}} src={History} />
                 {questions[questionIndex]?.question}
               </div>
               <TimerBar

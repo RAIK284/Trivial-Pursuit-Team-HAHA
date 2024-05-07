@@ -33,7 +33,7 @@ exports.findTopScores = async (req, res) => {
   try {
     const topUsers = await User.find()
       .sort({ total_score: -1 })
-      .limit(8)
+      .limit(7)
       .select("username total_score");
     res.json(topUsers);
   } catch (error) {
@@ -42,3 +42,4 @@ exports.findTopScores = async (req, res) => {
       .json({ message: "Error fetching top scores", error: error.message });
   }
 };
+

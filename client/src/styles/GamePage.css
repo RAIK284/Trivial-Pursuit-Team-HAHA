@@ -69,7 +69,9 @@
 .question-header {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  align-items: center;
+  height: 4rem;
+  gap: 2%;
   background-color: #aa65ff;
   font-size: 2rem;
   padding: 1rem;
@@ -174,7 +176,7 @@
 }
 .results-container {
   display: flex;
-  gap: 7rem;
+  gap: 5rem;
 }
 
 .results-header {

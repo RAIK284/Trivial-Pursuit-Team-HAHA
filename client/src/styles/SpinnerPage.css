@@ -41,3 +41,16 @@
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
 }
+
+.spinner-image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.result-display{
+  width: 25rem;
+}
