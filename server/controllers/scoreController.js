@@ -33,7 +33,7 @@ exports.findTopScores = async (req, res) => {
   try {
     const topUsers = await User.find()
       .sort({ total_score: -1 })
-      .limit(10)
+      .limit(8)
       .select("username total_score");
     res.json(topUsers);
   } catch (error) {

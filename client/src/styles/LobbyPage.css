@@ -37,11 +37,13 @@
 }
 
 .player-name {
+  width: 100%;
+  white-space: nowrap;
   width: 6rem;
   text-align: center;
-  overflow-x: hidden;
+  overflow: hidden;
   font-size: 2rem;
-  padding: 0.5rem 4rem 0.5rem 4rem;
+  padding: 0.5rem 0;
   border-radius: 0.8rem;
   font-weight: bold;
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
@@ -85,7 +87,7 @@
   background-color: #aa65ff;
   height: 80%;
   width: 50%;
-  margin: 3rem 3rem 0 0 ;
+  margin: 3rem 3rem 0 0;
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
@@ -161,16 +163,121 @@
   left: 90%;
 }
 
-
 .send-icon {
-    position: relative;
-    left: 93%;
-    bottom: 3.3rem;
+  position: relative;
+  left: 93%;
+  bottom: 3.3rem;
   cursor: pointer;
 }
 
-.message-length{
-   position: relative;
-   left: 6%;
-   bottom: 1%;
+.message-length {
+  position: relative;
+  left: 6%;
+  bottom: 1%;
+}
+
+.ai-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: var(--planet-purple);
+  padding: 20px 20px 6rem 20px;
+  border-radius: 10px;
+  width: 35rem;
+  height: 10rem;
+
+  text-align: center;
+}
+
+.ai-modal-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ai-easy {
+  width: 8rem;
+  background-color: rgb(73, 220, 171);
+  border: none;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.ai-easy:hover {
+  background-color: var(--planet-green);
+}
+
+.ai-medium {
+  width: 8rem;
+  background-color: #ffa37e;
+  border: none;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.ai-medium:hover {
+  background-color: #ee845b;
+}
+
+.ai-hard {
+  width: 8rem;
+  font-size: 1.5rem;
+  background-color: #fc5e49;
+  border: none;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.ai-hard:hover {
+  background-color: #ff4128;
+}
+
+.header-x {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rem;
+}
+
+.ai-icon {
+  cursor: pointer;
+  transition: all 300ms;
+  position: relative;
+  left: 48%;
+  bottom: 60%;
+}
+
+.ai-icon:hover {
+  color: rgb(216, 216, 216);
 }

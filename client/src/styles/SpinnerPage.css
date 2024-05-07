@@ -1,0 +1,43 @@
+.SpinnerPage {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #aa65ff; /* Lobby page background color */
+  background-image: url("../assets/img/space-ufo-bg.jpg");
+  background-size: cover;
+  color: white;
+  gap: 10rem;
+  overflow: hidden;
+}
+
+.spin-button {
+  color: white;
+  text-align: center;
+  background-color: var(--planet-purple);
+  border: none;
+  font-size: 2rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: rgba(0, 0, 0, 0.233) 0px 5px 10px;
+  font-weight: bold;
+  width: 20rem;
+  padding: 1rem 3rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.wheel-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.spinning {
+  font-size: 3rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}

@@ -4,21 +4,56 @@ import lobbyBackground from "../assets/img/space-ufo-bg.jpg";
 import "../styles/LobbyPage.css";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { LuSendHorizonal } from "react-icons/lu";
+import { FaPlus } from "react-icons/fa";
 import useRegister from "../hooks/useRegister";
-import useLobbySocket from "../hooks/useLobbySocket"; 
+import useLobbySocket from "../hooks/useLobbySocket";
+import { IoCloseSharp } from "react-icons/io5";
 
 const LobbyPage = () => {
   const { gameSession } = useParams();
   const { username } = useRegister();
   const [currentMessage, setCurrentMessage] = useState("");
+  const [aiPlayers, setAiPlayers] = useState(() => {
+    const savedAIPlayers = localStorage.getItem("aiPlayers");
+    return savedAIPlayers ? JSON.parse(savedAIPlayers) : [];
+  });
+  const [showModal, setShowModal] = useState(false);
+  const [aiDifficulty, setAiDifficulty] = useState("easy");
   const playerColors = ["#E97AEB", "#AFEC7F", "#3FF3C8", "#FFAF36"];
 
-  const { messages, players, startGame, sendMessage } = useLobbySocket(gameSession, username);
+  const { messages, players, startGame, sendMessage } = useLobbySocket(
+    gameSession,
+    username
+  );
+
+  const handleAddAIPlayer = () => {
+    setShowModal(true);
+  };
+
+  const confirmAddAIPlayer = () => {
+    const nextComputerNumber = aiPlayers.length + 1;
+    const aiPlayerName = `Computer ${nextComputerNumber}`;
+    const newAIPlayers = [
+      ...aiPlayers,
+      { name: aiPlayerName, difficulty: aiDifficulty },
+    ];
+    setAiPlayers(newAIPlayers);
+    localStorage.setItem("aiPlayers", JSON.stringify(newAIPlayers));
+    setShowModal(false);
+  };
 
   const coloredPlayers = players.map((playerName, index) => ({
     playerName,
     playerColor: playerColors[index % playerColors.length],
   }));
+
+  const displayPlayers = [
+    ...coloredPlayers,
+    ...aiPlayers.map((ai, index) => ({
+      playerName: `${ai.name}`,
+      playerColor: playerColors[(index + players.length) % playerColors.length],
+    })),
+  ];
 
   const messageDisplayRef = useRef(null);
   useEffect(() => {
@@ -33,10 +68,10 @@ const LobbyPage = () => {
       <img className="lobby-bg" alt="background" src={lobbyBackground} />
       <div className="player-button-container">
         <div className="all-player-container">
-          {coloredPlayers.map((player, index) => (
+          {displayPlayers.map((player, index) => (
             <div className="single-player-container" key={index}>
               <div
-                style={{ backgroundColor: player.playerColor }}
+                style={{ backgroundColor: player.playerColor, width: "100%" }}
                 className="player-name"
               >
                 {player.playerName}
@@ -45,15 +80,67 @@ const LobbyPage = () => {
             </div>
           ))}
         </div>
-        <button
-          onClick={() => {
-            startGame();
-          }}
-          className="start-game-button"
-        >
+
+        <button onClick={startGame} className="start-game-button">
           Start Game
         </button>
-        { gameSession && <p className="session-id">Session ID: <span data-testid="gameSession">{gameSession}</span></p>}
+        <button
+          onClick={handleAddAIPlayer}
+          className="start-game-button ai-button"
+        >
+          Add a Computer <FaPlus />
+        </button>
+        {gameSession && (
+          <p className="session-id">
+            Session ID: <span data-testid="gameSession">{gameSession}</span>
+          </p>
+        )}
+        {showModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <div className="header-x">
+                <h1 className="ai-header">Select AI Difficulty</h1>
+              </div>
+              <IoCloseSharp
+                onClick={() => {
+                  setShowModal(false);
+                }}
+                className="ai-icon"
+                size={30}
+              />
+
+              <div className="ai-modal-content">
+                <button
+                  className="ai-easy"
+                  onClick={() => {
+                    setAiDifficulty("Easy");
+                    confirmAddAIPlayer();
+                  }}
+                >
+                  Easy
+                </button>
+                <button
+                  className="ai-medium"
+                  onClick={() => {
+                    setAiDifficulty("Medium");
+                    confirmAddAIPlayer();
+                  }}
+                >
+                  Medium
+                </button>
+                <button
+                  className="ai-hard"
+                  onClick={() => {
+                    setAiDifficulty("Hard");
+                    confirmAddAIPlayer();
+                  }}
+                >
+                  Hard
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="chat-room-container">

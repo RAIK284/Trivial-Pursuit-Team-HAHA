@@ -30,17 +30,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 85%;
-  gap: 1rem;
+  width: 100%;
+  gap: 3rem;
+  margin-top: 5rem;
 }
 
 .button-block {
   border: 2px solid rgba(0, 0, 0, 0);
   border-radius: 10px;
-  padding: 2%;
-  width: 80%;
-  height: 70%;
-  margin: 5%;
+  padding: 5rem 1rem;
+  width: 33rem;
+
+  height: 30rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,6 +76,7 @@
   border-radius: 1rem;
   width: 100%;
   transition: all 300ms;
+  margin-top: 3rem;
 }
 
 .create-button {
@@ -83,18 +85,34 @@
 }
 
 .create-button:hover {
-  background-color: #4bc25a; 
+  background-color: #4bc25a;
 }
 
 .join-button {
-  background-color: #8ee1ce; 
+  background-color: #8ee1ce;
   color: white;
 }
 .join-button:hover {
   background-color: #22d9ae;
 }
 
+.leaderboard-button {
+  color: white;
+  background-color: var(--planet-orange);
+  width: 75%;
+  padding: 1rem 0 1rem 0;
+  font-size: 2rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.33);
+  box-shadow: rgba(0, 0, 0, 0.233) 0px 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 1rem;
+  width: 100%;
+  transition: all 300ms;
+  margin-top: 1.4rem;
+}
+
 .create-or-join-username {
   color: var(--planet-orange);
 }
-

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/CreateOrJoinPage.css";
 import useRegister from "../hooks/useRegister";
 import useGameSession from "../hooks/useGameSession";
+import Leaderboard from "../assets/img/leaderboard.png";
 
 const CreateOrJoinPage = () => {
   const navigate = useNavigate();
@@ -30,7 +31,11 @@ const CreateOrJoinPage = () => {
             src="https://images.vexels.com/media/users/3/249681/isolated/preview/2e033ab207c08313f20bf7478f0b064b-90-s-arcade-color-stroke.png"
             alt="Start Game Icon"
           />
-          <button data-testid="new-game-button"  onClick={createRoom} className="create-button">
+          <button
+            data-testid="new-game-button"
+            onClick={createRoom}
+            className="create-button"
+          >
             NEW GAME{" "}
           </button>
         </div>
@@ -40,13 +45,25 @@ const CreateOrJoinPage = () => {
             alt="Join Game Icon"
           />
           <button
-          data-testid="join-game-button"
+            data-testid="join-game-button"
             onClick={() => {
               navigate("/join");
             }}
             className="join-button"
           >
             JOIN GAME{" "}
+          </button>
+        </div>
+        <div className="button-block">
+          <img src={Leaderboard} alt="Join Game Icon" />
+          <button
+            data-testid="join-game-button"
+            onClick={() => {
+              navigate("/leaderboard");
+            }}
+            className="leaderboard-button"
+          >
+            LEADERBOARD{" "}
           </button>
         </div>
       </div>
