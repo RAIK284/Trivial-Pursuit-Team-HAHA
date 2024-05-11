@@ -1,6 +1,6 @@
 :root {
-  --light-transparent: rgba(255, 255, 255, 0.2); /* Light transparent color */
-  --light: rgba(255, 255, 255, 0.25); /* Light transparent color */
+  --light-transparent: rgba(255, 255, 255, 0.2); 
+  --light: rgba(255, 255, 255, 0.25); 
 }
 
 .create-or-join-page {
@@ -9,10 +9,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #aa65ff; /* Lobby page background color */
+  background-color: #aa65ff;
   background-image: url("../assets/img/space-ufo-bg.jpg");
   background-size: cover;
-  color: white; /* Lobby page text color */
+  color: white; 
 }
 
 .game-portal-header {
@@ -32,29 +32,28 @@
   align-items: center;
   width: 100%;
   gap: 3rem;
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
 
 .button-block {
   border: 2px solid rgba(0, 0, 0, 0);
   border-radius: 10px;
   padding: 5rem 1rem;
-  width: 33rem;
+  width: 29rem;
 
   height: 30rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: flex-end; */
   border: solid rgba(255, 255, 255, 0.2);
   background-color: var(--planet-purple);
-  transition: background-color 0.3s ease; /* Smooth transition effect */
+  transition: background-color 0.3s ease;
 }
 
 .button-block img {
-  width: 60%; /* Adjust size of icon */
-  height: auto; /* Adjust size of icon */
-  margin-bottom: 10%; /* Spacing between icon and button */
+  width: 60%;
+  height: auto;
+  margin-bottom: 10%;
   margin: 5%;
 }
 
@@ -64,7 +63,6 @@
 
 .create-button,
 .join-button {
-  /* padding: 5% 5%; */
   width: 75%;
   padding: 1rem 0 1rem 0;
   font-size: 2rem;
@@ -80,7 +78,7 @@
 }
 
 .create-button {
-  background-color: #afec7f; /* Green */
+  background-color: #afec7f; 
   color: white;
 }
 

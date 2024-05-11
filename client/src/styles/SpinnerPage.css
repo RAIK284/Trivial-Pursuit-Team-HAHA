@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #aa65ff; /* Lobby page background color */
+  background-color: #aa65ff;
   background-image: url("../assets/img/space-ufo-bg.jpg");
   background-size: cover;
   color: white;
@@ -40,4 +40,17 @@
   font-size: 3rem;
   text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
+}
+
+.spinner-image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  text-shadow: 1.5px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.result-display{
+  width: 25rem;
 }

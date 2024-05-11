@@ -25,7 +25,7 @@ const useLobbySocket = (gameSession, username) => {
       });
 
       socket.on("navigate_to_game", () => {
-        navigate(`/round/${gameSession}`);
+        navigate(`/spinner-page/${gameSession}`);
     });
     }
 

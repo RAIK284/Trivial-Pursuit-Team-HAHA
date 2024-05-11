@@ -104,7 +104,6 @@ describe("Game Tests", () => {
       });
       let correctAnswer = "";
       await waitFor(() => {
-        // First Answer is always correct but shuffled later
         correctAnswer = screen.getAllByTestId("question-choices")[0];
       });
       fireEvent.click(correctAnswer);
@@ -130,7 +129,6 @@ describe("Game Tests", () => {
       let correctAnswer = "";
       await waitFor(() => {
 
-        // Any answer that isn't in the first position is incorrect
         correctAnswer = screen.getAllByTestId("question-choices")[1];
       });
       fireEvent.click(correctAnswer);

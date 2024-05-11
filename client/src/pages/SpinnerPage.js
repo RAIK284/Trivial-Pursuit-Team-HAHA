@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/SpinnerPage.css";
 import { Wheel } from "react-custom-roulette";
-
-// Import images for each category
+import { useNavigate, useParams } from "react-router-dom";
 import History from "../assets/img/history.png";
 import Science from "../assets/img/science.png";
 import Art from "../assets/img/art.png";
@@ -11,6 +10,8 @@ import Geography from "../assets/img/geography.png";
 import Sports from "../assets/img/sports.png";
 
 const SpinnerPage = () => {
+  const { gameSession } = useParams();
+  const navigate = useNavigate();
   const data = [
     {
       option: "History",
@@ -38,7 +39,6 @@ const SpinnerPage = () => {
     },
   ];
 
-  // Image mapping
   const imageMap = {
     History,
     Science,
@@ -51,36 +51,46 @@ const SpinnerPage = () => {
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
 
-  const handleSpinClick = () => {
-    if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * data.length);
-      setPrizeNumber(newPrizeNumber);
-      setMustSpin(true);
-    }
+  useEffect(() => {
+    const newPrizeNumber = 0;
+    setPrizeNumber(newPrizeNumber);
+    setMustSpin(true);
+  }, []);
+
+  const handleStopSpinning = () => {
+    setMustSpin(false);
+    const timer = setTimeout(() => {
+      navigate(`/round/${gameSession}`, {
+        state: { category: data[prizeNumber].option },
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
   };
 
   return (
     <div className="SpinnerPage">
       <div className="wheel-button-container">
         <Wheel
+          fontSize={30}
+          spinDuration={0.5}
           mustStartSpinning={mustSpin}
           prizeNumber={prizeNumber}
           data={data}
-          onStopSpinning={() => {
-            setMustSpin(false);
-          }}
+          onStopSpinning={handleStopSpinning}
         />
-        <button className="spin-button" onClick={handleSpinClick}>
-          SPIN
-        </button>
       </div>
       <div className="result-display">
         <span className="spinning">{mustSpin ? "Spinning..." : ""}</span>
         {!mustSpin && (
-          <img
-            src={imageMap[data[prizeNumber].option]}
-            alt={data[prizeNumber].option}
-          />
+          <>
+            <div className="spinner-image-container">
+              <img
+                src={imageMap[data[prizeNumber].option]}
+                alt={data[prizeNumber].option}
+              />
+              <div>{data[prizeNumber].option}</div>
+            </div>
+          </>
         )}
       </div>
     </div>

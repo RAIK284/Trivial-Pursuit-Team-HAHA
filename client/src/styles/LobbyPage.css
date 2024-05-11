@@ -112,7 +112,6 @@
 }
 .chat-input {
   width: 100%;
-  /* margin-left: 3rem; */
   height: 5rem;
   border-radius: 0.5rem;
   border: none;
@@ -138,7 +137,6 @@
   margin-bottom: 1rem;
   margin-left: 0.4rem;
   background-color: #3d1f9e;
-  /* border: 0.5rem solid #3d1f9e; */
   border-radius: 0.5rem;
   align-self: center;
   scrollbar-color: #3d1f9e white;
@@ -211,7 +209,7 @@
 
 .ai-easy {
   width: 8rem;
-  background-color: rgb(73, 220, 171);
+  background-color: rgb(73, 220, 110);
   border: none;
   color: white;
   padding: 1rem;
@@ -229,7 +227,7 @@
 
 .ai-medium {
   width: 8rem;
-  background-color: #ffa37e;
+  background-color: #fae951;
   border: none;
   color: white;
   padding: 1rem;
@@ -248,7 +246,7 @@
 .ai-hard {
   width: 8rem;
   font-size: 1.5rem;
-  background-color: #fc5e49;
+  background-color: #ff4128;
   border: none;
   color: white;
   padding: 1rem;

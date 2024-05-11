@@ -8,12 +8,10 @@ import LoginPage from "../pages/LoginPage";
 
 describe("UserTests", () => {
   beforeAll(() => {
-    // Shows Possible JSON errors for Fetching when Mocking
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
   afterAll(() => {
-    // Restore the Errors after logged to the console
     console.error.mockRestore();
   });
 

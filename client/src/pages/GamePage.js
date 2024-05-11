@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import lobbyBackground from "../assets/img/space-saucer-bg.jpg";
 import "../styles/GamePage.css";
@@ -9,13 +9,14 @@ import TimerBar from "../components/TimerBar";
 import PlayerContainer from "../components/PlayerContainer";
 import QuestionChoices from "../components/QuestionChoices";
 import tempWheel from "../assets/img/Blank.png";
+import History from "../assets/img/history.png";
 
 const GamePage = () => {
   const { username } = useRegister();
   const { gameSession } = useParams();
   const [players, setPlayers] = useState([]);
-  const [aiScoresSet, setAiScoresSet] = useState(false);
-
+  const location = useLocation();
+  const category = location.state?.category || "defaultCategory";
   const [aiPlayers, setAiPlayers] = useState(() => {
     const storedAiPlayers = localStorage.getItem("aiPlayers");
     return storedAiPlayers
@@ -26,7 +27,7 @@ const GamePage = () => {
   const [shuffledAnswers, setShuffledAnswers] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [scores, setScores] = useState({});
-  const [timer, setTimer] = useState(5050);
+  const [timer, setTimer] = useState(7050);
   const [answerRevealed, setAnswerRevealed] = useState(false);
   const [socket, setSocket] = useState(null);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -79,11 +80,11 @@ const GamePage = () => {
       });
       fetchQuestions();
     }
-  }, [socket, username, gameSession, aiPlayers]);
+  }, [socket, username, gameSession, aiPlayers, category]);
 
   const fetchQuestions = async () => {
     const response = await fetch(
-      `https://the-trivia-api.com/api/questions?categories=history&limit=${numFetched}`
+      `https://the-trivia-api.com/api/questions?categories=${category}&limit=${numFetched}`
     );
     const data = await response.json();
     setQuestions(data);
@@ -129,7 +130,7 @@ const GamePage = () => {
         }
         setSelectedAnswer(null);
         setQuestionIndex((prev) => prev + 1);
-        setTimer(5050);
+        setTimer(7050);
       }, 2000);
     }
   }, [answerRevealed, selectedAnswer]);
@@ -154,8 +155,7 @@ const GamePage = () => {
   };
 
   const simulateAIAnswer = (aiPlayer, answers, index) => {
-    // Always pick the correct answer for simplicity in this adjustment
-    const correct = true;
+    const correct = Math.random(0.5) < 1;
     const answerIndex = answers.findIndex((ans) => ans.isCorrect);
 
     if (answerIndex === -1) {
@@ -175,9 +175,11 @@ const GamePage = () => {
     // Adjust the score based on the AI player's index
     if (selectedAnswer.isCorrect) {
       let scoreIncrement = 100;
-      if (index === 0) scoreIncrement = 300; // First AI player
-      else if (index === 1) scoreIncrement = 200; // Second AI player
-      else if (index === 2) scoreIncrement = 100; // Third AI player
+      if (index === 0)
+        scoreIncrement = 300; // First AI player for demo purposes
+      else if (index === 1)
+        scoreIncrement = 200; // Second AI player for demo purposes
+      else if (index === 2) scoreIncrement = 100; // Third AI player for demo purposes
 
       const updatedScore = (scores[aiPlayer] || 0) + scoreIncrement;
       setScores((prevScores) => ({ ...prevScores, [aiPlayer]: updatedScore }));
@@ -201,12 +203,13 @@ const GamePage = () => {
           <>
             <div className="question-container">
               <div data-testid="question" className="question-header">
+                <img style={{ height: "6rem" }} src={History} />
                 {questions[questionIndex]?.question}
               </div>
               <TimerBar
                 width={2570}
                 height={10}
-                percentage={(timer / 5050) * 100}
+                percentage={(timer / 7050) * 100}
               />
             </div>
             <QuestionChoices

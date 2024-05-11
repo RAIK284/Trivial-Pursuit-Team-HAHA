@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ShortUniqueId from "short-unique-id";
 import { useNavigate } from "react-router-dom";
 import "../styles/CreateOrJoinPage.css";
