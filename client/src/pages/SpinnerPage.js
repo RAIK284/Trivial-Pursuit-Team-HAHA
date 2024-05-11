@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../styles/SpinnerPage.css";
 import { Wheel } from "react-custom-roulette";
 import { useNavigate, useParams } from "react-router-dom";
-
-// Import images for each category
 import History from "../assets/img/history.png";
 import Science from "../assets/img/science.png";
 import Art from "../assets/img/art.png";
@@ -62,9 +60,9 @@ const SpinnerPage = () => {
   const handleStopSpinning = () => {
     setMustSpin(false);
     const timer = setTimeout(() => {
-      // navigate(`/round/${gameSession}`, {
-      //   state: { category: data[prizeNumber].option },
-      // });
+      navigate(`/round/${gameSession}`, {
+        state: { category: data[prizeNumber].option },
+      });
     }, 3000);
     return () => clearTimeout(timer);
   };
@@ -73,7 +71,8 @@ const SpinnerPage = () => {
     <div className="SpinnerPage">
       <div className="wheel-button-container">
         <Wheel
-        spinDuration={.5}
+          fontSize={30}
+          spinDuration={0.5}
           mustStartSpinning={mustSpin}
           prizeNumber={prizeNumber}
           data={data}

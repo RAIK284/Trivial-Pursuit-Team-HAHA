@@ -76,7 +76,7 @@
 
 .register-form {
   height: 23rem;
-  /* margin-top: 5rem; */
+  margin-top: 5rem;
 }
 
 .username-container {
@@ -152,7 +152,6 @@
 .login {
   color: white;
   font-weight: bold;
-  /* cursor: pointer; */
   text-decoration: none;
   transition: all 300ms;
 }

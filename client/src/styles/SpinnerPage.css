@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #aa65ff; /* Lobby page background color */
+  background-color: #aa65ff;
   background-image: url("../assets/img/space-ufo-bg.jpg");
   background-size: cover;
   color: white;
